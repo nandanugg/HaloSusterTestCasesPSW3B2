@@ -2,6 +2,7 @@ import { fail } from "k6";
 import { isEqualWith, isExists, isOrdered, isTotalDataInRange, isValidDate } from "../helpers/assertion.js";
 import { testGetAssert } from "../helpers/request.js";
 import { isItUserValid, isNurseUserValid } from "../types/user.js";
+import { generateRandomNumber } from "../helpers/generator.js";
 /**
  * 
  * @param {import("../config.js").Config} config 
@@ -20,7 +21,7 @@ export function TestMedicalRecordGet(config, userIt, userNurse, tags) {
     }
     /** @type {import("../helpers/request.js").RequestAssertResponse} */
     const headers = {
-        Authorization: `Bearer ${userIt.accessToken}`
+        Authorization: `Bearer ${generateRandomNumber(0, 1) ? userNurse.accessToken : userIt.accessToken}`
     }
 
     if (!config.POSITIVE_CASE) {
