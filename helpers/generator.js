@@ -59,6 +59,14 @@ export function generateRandomUsername() {
 
     return username;
 }
+
+export function generateRandomDate(from, to) {
+    const fromDate = new Date(from).getTime();
+    const toDate = new Date(to).getTime();
+    const randomDate = new Date(fromDate + Math.random() * (toDate - fromDate));
+    return randomDate.toISOString();
+}
+
 export function generateRandomName() {
     // Define parts of names for generating random names
     const prefixes = ['An', 'Ben', 'Jon', 'Xen', 'Lor', 'Sam', 'Max', 'Jen', 'Leo', 'Kay'];

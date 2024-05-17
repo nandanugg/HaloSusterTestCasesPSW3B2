@@ -16,12 +16,12 @@ const registerNegativePayloads = (positivePayload) => generateTestObjects({
  * @returns {import("../types/user.js").ItUser | null}
  */
 export function TestLogin(user, config, tags) {
+    const currentRoute = `${config.BASE_URL}/v1/user/it/login`
+    const currentFeature = "login"
     if (!isItUserValid(user)) {
         fail(`${currentFeature} Invalid user object`)
     }
 
-    const currentRoute = `${config.BASE_URL}/v1/user/it/login`
-    const currentFeature = "login"
     /** @type {import("../types/user.js").ItUser} */
     const registerPositivePayload = {
         name: user.name,

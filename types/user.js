@@ -7,6 +7,19 @@
  * @property {string} accessToken - The accessToken of the user.
  */
 /**
+ * @typedef {Object} NurseUserWithoutAccess
+ * @property {string} userId - The user id of the user.
+ * @property {string} name - The name of the user.
+ * @property {number} nip - The nip of the user.
+ */
+/**
+ * @typedef {Object} NurseUserWithoutLogin
+ * @property {string} userId - The user id of the user.
+ * @property {string} name - The name of the user.
+ * @property {number} nip - The nip of the user.
+ * @property {string} password - The password of the user.
+ */
+/**
  * @typedef {Object} NurseUser 
  * @property {string} userId - The user id of the user.
  * @property {string} name - The name of the user.

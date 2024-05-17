@@ -9,7 +9,6 @@ const { generateRandomNumber } = require("../helpers/generator.js");
  * @param {import("../config.js").Config} config 
  * @param {Object} tags 
  * @param {import("../types/user.js").ItUser} user
- * @returns {import("../types/user.js").NurseUser | null}
  */
 export function TestNurseManagementDelete(config, user, tags) {
     if (!isItUserValid(user)) {

@@ -15,7 +15,7 @@ const nurseManagemenetNegativePayload = (positivePayload) => generateTestObjects
  * @param {import("../config.js").Config} config 
  * @param {Object} tags 
  * @param {import("../types/user.js").ItUser} user
- * @returns {import("../types/user.js").NurseUser | null}
+ * @returns {import("../types/user.js").NurseUserWithoutAccess | null}
  */
 export function TestNurseManagementPost(config, user, tags) {
     if (!isItUserValid(user)) {

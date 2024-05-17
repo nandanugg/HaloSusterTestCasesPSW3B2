@@ -2,7 +2,7 @@ import { fail } from "k6";
 import { testGetAssert, testPutJsonAssert } from "../helpers/request.js";
 import { generateNurseUserNip, isItUserValid } from "../types/user.js";
 import { isEqual, isExists } from "../helpers/assertion.js";
-const { generateTestObjects, generateRandomName, generateRandomNumber, clone } = require("../helpers/generator.js");
+const { generateTestObjects, generateRandomName, generateRandomNumber, combine } = require("../helpers/generator.js");
 
 const nurseManagemenetNegativePayload = (positivePayload) => generateTestObjects({
     nip: { type: "number", notNull: true, min: 1000000000000, max: 999999999999999 },
@@ -13,7 +13,6 @@ const nurseManagemenetNegativePayload = (positivePayload) => generateTestObjects
  * @param {import("../config.js").Config} config 
  * @param {Object} tags 
  * @param {import("../types/user.js").ItUser} user
- * @returns {import("../types/user.js").NurseUser | null}
  */
 export function TestNurseManagementPut(config, user, tags) {
     if (!isItUserValid(user)) {
@@ -80,8 +79,8 @@ export function TestNurseManagementPut(config, user, tags) {
         }, config, tags);
 
         testPutJsonAssert(currentFeature, "edit with the existing nip", currentRoute,
-            clone(nurseManagementPositivePayload, { nip: itUserToTry.nip }), headers, {
-            ['should return 409']: (res) => res.status === 409,
+            combine(nurseManagementPositivePayload, { nip: itUserToTry.nip }), headers, {
+            ['should return 404']: (res) => res.status === 404,
         }, config, tags);
     }
 

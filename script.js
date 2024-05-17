@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { sleep } from 'k6';
 import { config } from './config.js';
-import { clone, } from './helpers/generator.js';
+import { clone, combine, generateRandomNumber, } from './helpers/generator.js';
 import exec from 'k6/execution';
 import { TestLogin } from './testCases/authLogin.js';
 import { TestRegister } from './testCases/authRegister.js';
@@ -9,6 +9,11 @@ import { TestNurseManagementPost } from './testCases/nurseManagementPost.js';
 import { TestNurseManagementGet } from './testCases/nurseManagementGet.js';
 import { TestNurseManagementPut } from './testCases/nurseManagementPut.js';
 import { TestNurseManagementDelete } from './testCases/nurseManagementDelete.js';
+import { TestMedicalPatientGet } from './testCases/medicalPatientGet.js';
+import { TestMedicalPatientPost } from './testCases/medicalPatientPost.js';
+import { TestMedicalRecordPost } from './testCases/medicalRecordPost.js';
+import { TestNurseManagementAccessPost } from './testCases/nurseManagementAccessPost';
+import { TestNurseManagementLoginPost } from './testCases/nurseManagementLoginPost.js';
 // import sql from 'k6/x/sql';
 
 const stages = []
@@ -64,6 +69,18 @@ export default function () {
         TestNurseManagementGet(config, usr, tags)
         TestNurseManagementPut(config, usr, tags)
         TestNurseManagementDelete(config, usr, tags)
+        const positiveConfig = combine(config, {
+            POSITIVE_CASE: true
+        })
+        const rawNurse = TestNurseManagementPost(positiveConfig, usr, tags)
+        const accessNurse = TestNurseManagementAccessPost(config, usr, rawNurse, tags)
+        const nurse = TestNurseManagementLoginPost(config, accessNurse, tags)
+        if (nurse) {
+            TestMedicalPatientPost(config, usr, nurse, tags)
+            TestMedicalPatientGet(config, usr, nurse, tags)
+            TestMedicalRecordPost(config, usr, nurse, tags)
+            TestMedicalRecordPost(config, usr, nurse, tags)
+        }
     }
     sleep(1)
     // }

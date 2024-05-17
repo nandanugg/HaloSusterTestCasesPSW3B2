@@ -7,7 +7,6 @@ import { isItUserValid } from "../types/user.js";
  * @param {import("../config.js").Config} config 
  * @param {Object} tags 
  * @param {import("../types/user.js").ItUser} user
- * @returns {import("../types/user.js").NurseUser | null}
  */
 export function TestNurseManagementGet(config, user, tags) {
     if (!isItUserValid(user)) {
@@ -91,7 +90,7 @@ export function TestNurseManagementGet(config, user, tags) {
         ['should have return ordered by oldest first']: (res) => isOrdered(res, 'data[].createdAt', 'asc', (v) => new Date(v)),
     }, config, tags);
 
-    const paginationRes = testGetAssert(currentFeature, "get all users with limit", currentRoute, { limit: 2 }, headers, {
+    const paginationRes = testGetAssert(currentFeature, "get all users with limit", currentRoute, { limit: config.LOAD_TEST ? 10 : 2 }, headers, {
         ['should return 200']: (res) => res.status === 200,
         ['should all have a userId']: (res) => isExists(res, "data[].userId"),
         ['should all have a nip']: (res) => isExists(res, "data[].nip"),
@@ -121,4 +120,6 @@ export function TestNurseManagementGet(config, user, tags) {
             },
         }, config, tags);
     }
+
+    return null
 }
