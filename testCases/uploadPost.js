@@ -29,6 +29,7 @@ export function TestUpload(config, userIt, userNurse, tags) {
 
     const headers = {
         Authorization: `Bearer ${generateRandomNumber(0, 1) ? userNurse.accessToken : userIt.accessToken}`,
+        ['Accept']: 'multipart/form-data'
     }
 
     let res;
