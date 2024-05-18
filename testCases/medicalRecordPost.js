@@ -83,7 +83,7 @@ export function TestMedicalRecordPost(config, userIt, userNurse, tags) {
         testPostJsonAssert(currentFeature, "not exists identity number", currentRoute, combine(medicalRecordPositivePayload, {
             identityNumber: generateRandomNumber(1000000000000000, 9007199254740991)
         }), headers, {
-            ['should return 400']: (res) => res.status === 400,
+            ['should return 404']: (res) => res.status === 404,
         }, config, tags);
     }
 
