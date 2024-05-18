@@ -20,8 +20,9 @@ export function TestMedicalRecordGet(config, userIt, userNurse, tags) {
         fail(`${currentFeature} Invalid userNurse object`)
     }
     /** @type {import("../helpers/request.js").RequestAssertResponse} */
+    const userToTry = generateRandomNumber(0, 1) ? userNurse : userIt
     const headers = {
-        Authorization: `Bearer ${generateRandomNumber(0, 1) ? userNurse.accessToken : userIt.accessToken}`
+        Authorization: `Bearer ${userToTry.accessToken}`
     }
 
     if (!config.POSITIVE_CASE) {
@@ -49,7 +50,7 @@ export function TestMedicalRecordGet(config, userIt, userNurse, tags) {
         ['should not have more than 5 result']: (res) => isTotalDataInRange(res, 'data[]', 1, 5),
     }, config, tags);
 
-    testGetAssert(currentFeature, "get all record with createdBy.userId", currentRoute, { 'createdBy.userid': userNurse.userId }, headers, {
+    testGetAssert(currentFeature, "get all record with createdBy.userId", currentRoute, { 'createdBy.userid': userToTry.userId }, headers, {
         ['should return 200']: (res) => res.status === 200,
         ['should all have a identityDetail']: (res) => isExists(res, "data[].identityDetail"),
         ['should all have a identityDetail.identityNumber']: (res) => isExists(res, "data[].identityDetail.identityNumber"),
@@ -62,13 +63,13 @@ export function TestMedicalRecordGet(config, userIt, userNurse, tags) {
         ['should all have a medications']: (res) => isExists(res, "data[].medications"),
         ['should all have a createdBy']: (res) => isExists(res, "data[].createdBy"),
         ['should all have a createdBy.name']: (res) => isExists(res, "data[].createdBy.name"),
-        ['should all have a createdBy.nip']: (res) => isEqualWith(res, "data[].createdBy.nip", userNurse.nip),
-        ['should all have a createdBy.userId']: (res) => isEqualWith(res, "data[].createdBy.userId", userNurse.userId),
+        ['should all have a createdBy.nip']: (res) => isEqualWith(res, "data[].createdBy.nip", userToTry.nip),
+        ['should all have a createdBy.userId']: (res) => isEqualWith(res, "data[].createdBy.userId", userToTry.userId),
         ['should have createdAt and format should be date']: (res) => isEqualWith(res, 'data[].createdAt', (v) => v.every(a => isValidDate(a))),
         ['should not have more than 5 result']: (res) => isTotalDataInRange(res, 'data[]', 1, 5),
     }, config, tags);
 
-    testGetAssert(currentFeature, "get all record with nip", currentRoute, { 'nip': userNurse.nip }, headers, {
+    testGetAssert(currentFeature, "get all record with nip", currentRoute, { 'nip': userToTry.nip }, headers, {
         ['should return 200']: (res) => res.status === 200,
         ['should all have a identityDetail']: (res) => isExists(res, "data[].identityDetail"),
         ['should all have a identityDetail.identityNumber']: (res) => isExists(res, "data[].identityDetail.identityNumber"),
@@ -81,7 +82,7 @@ export function TestMedicalRecordGet(config, userIt, userNurse, tags) {
         ['should all have a medications']: (res) => isExists(res, "data[].medications"),
         ['should all have a createdBy']: (res) => isExists(res, "data[].createdBy"),
         ['should all have a createdBy.name']: (res) => isExists(res, "data[].createdBy.name"),
-        ['should all have a createdBy.nip']: (res) => isExists(res, "data[].createdBy.nip", userNurse.nip),
+        ['should all have a createdBy.nip']: (res) => isExists(res, "data[].createdBy.nip", userToTry.nip),
         ['should all have a createdBy.userId']: (res) => isExists(res, "data[].createdBy.userId"),
         ['should have createdAt and format should be date']: (res) => isEqualWith(res, 'data[].createdAt', (v) => v.every(a => isValidDate(a))),
         ['should not have more than 5 result']: (res) => isTotalDataInRange(res, 'data[]', 1, 5),
@@ -100,7 +101,7 @@ export function TestMedicalRecordGet(config, userIt, userNurse, tags) {
         ['should all have a medications']: (res) => isExists(res, "data[].medications"),
         ['should all have a createdBy']: (res) => isExists(res, "data[].createdBy"),
         ['should all have a createdBy.name']: (res) => isExists(res, "data[].createdBy.name"),
-        ['should all have a createdBy.nip']: (res) => isExists(res, "data[].createdBy.nip", userNurse.nip),
+        ['should all have a createdBy.nip']: (res) => isExists(res, "data[].createdBy.nip", userToTry.nip),
         ['should all have a createdBy.userId']: (res) => isExists(res, "data[].createdBy.userId"),
         ['should have createdAt and format should be date']: (res) => isEqualWith(res, 'data[].createdAt', (v) => v.every(a => isValidDate(a))),
         ['should not have more than 5 result']: (res) => isTotalDataInRange(res, 'data[]', 1, 5),
