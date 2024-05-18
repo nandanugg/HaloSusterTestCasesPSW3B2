@@ -30,11 +30,12 @@ export function TestMedicalPatientGet(config, userIt, userNurse, tags) {
         }, config, tags);
     }
     let medicalPatientPositivePayload;
+    const phoneNumberToSearch = `62${generateRandomNumber(1, 9)}`
     if (!config.LOAD_TEST) {
         for (let index = 0; index < 10; index++) {
             medicalPatientPositivePayload = {
                 identityNumber: generateRandomNumber(1000000000000000, 9007199254740991),
-                phoneNumber: `+62${generateRandomNumber(1000000000, 9999999999)}`,
+                phoneNumber: `+${phoneNumberToSearch}${generateRandomNumber(100000000, 999999999)}`,
                 name: generateRandomName(),
                 gender: generateRandomGender(),
                 birthDate: generateRandomDate(new Date(1980, 1, 1), new Date(2024, 12, 31)),
@@ -86,7 +87,6 @@ export function TestMedicalPatientGet(config, userIt, userNurse, tags) {
         }, config, tags);
     }
 
-    const phoneNumberToSearch = `62${generateRandomNumber(1, 9)}`
     testGetAssert(currentFeature, "get all patient with phoneNumber", currentRoute, { phoneNumber: phoneNumberToSearch }, headers, {
         ['should return 200']: (res) => res.status === 200,
         ['should all have a identityNumber']: (res) => isExists(res, "data[].identityNumber"),
