@@ -1,7 +1,6 @@
 import { isExists } from "../helpers/assertion.js";
 import { combine, generateRandomName, generateRandomPassword, generateTestObjects } from "../helpers/generator.js";
 import { testPostJsonAssert } from "../helpers/request.js";
-import { generateItUserNip } from "../types/user.js";
 
 const registerNegativePayloads = (positivePayload) => generateTestObjects({
     nip: { type: "number", notNull: true, min: 1000000000000, max: 999999999999999 },
@@ -14,13 +13,13 @@ const registerNegativePayloads = (positivePayload) => generateTestObjects({
  * @param {Object} tags 
  * @returns {import("../types/user.js").ItUser | null}
  */
-export function TestRegister(config, tags) {
+export function TestRegister(config, nip, tags) {
     const currentRoute = `${config.BASE_URL}/v1/user/it/register`
     const currentFeature = "register"
     /** @type {import("../types/user.js").ItUser} */
     const registerPositivePayload = {
         name: generateRandomName(),
-        nip: generateItUserNip(),
+        nip: nip,
         password: generateRandomPassword()
     }
 

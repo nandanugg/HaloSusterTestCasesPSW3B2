@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { sleep } from 'k6';
 import { config } from './config.js';
-import { clone, combine, generateRandomNumber, } from './helpers/generator.js';
+import { combine, } from './helpers/generator.js';
 import exec from 'k6/execution';
 import { TestLogin } from './testCases/authLogin.js';
 import { TestRegister } from './testCases/authRegister.js';
@@ -15,7 +15,8 @@ import { TestMedicalRecordPost } from './testCases/medicalRecordPost.js';
 import { TestNurseManagementAccessPost } from './testCases/nurseManagementAccessPost.js';
 import { TestNurseManagementLoginPost } from './testCases/nurseManagementLoginPost.js';
 import { TestUpload } from './testCases/uploadPost.js';
-// import sql from 'k6/x/sql';
+import { generateItUserNip } from './types/user.js';
+import { TestMedicalRecordGet } from './testCases/medicalRecordGet.js';
 
 const stages = []
 
@@ -39,31 +40,133 @@ if (config.LOAD_TEST) {
 
 // function determineStage() {
 //     let elapsedTime = (exec.instance.currentTestRunDuration / 1000).toFixed(0);
-//     if (elapsedTime < 5) return 1; // First 5 seconds
-//     if (elapsedTime < 15) return 2; // Next 10 seconds
-//     if (elapsedTime < 35) return 3; // Next 20 seconds
-//     if (elapsedTime < 55) return 4; // Next 20 secondsd
-//     return 5; // Remaining time
+//     if (elapsedTime < 5) return 1;
+//     if (elapsedTime < 15) return 2;
+//     if (elapsedTime < 35) return 3;
+//     if (elapsedTime < 55) return 4;
+//     if (elapsedTime < 75) return 5;
+//     if (elapsedTime < 95) return 6;
+//     if (elapsedTime < 115) return 7;
+//     if (elapsedTime < 135) return 8;
+//     return 9; // Remaining time
 // }
 
 export const options = {
     stages,
 };
 
-// const positiveCaseConfig = Object.assign(clone(config), {
-//     POSITIVE_CASE: true
-// })
+// function generateNIPs(prefix, insertFn) {
+//     const currentYear = new Date().getFullYear();
 
-// function calculatePercentage(percentage, __VU) {
-//     return (__VU - 1) % Math.ceil(__VU / Math.round(__VU * percentage)) === 0;
+//     for (let year = 2000; year <= currentYear; year++) {
+//         for (let month = 1; month <= 12; month++) {
+//             const formattedYear = year.toString().substring(2);
+//             const formattedMonth = month < 10 ? `0${month}` : month.toString();
+
+//             for (let gender = 1; gender <= 2; gender++) {
+//                 const fourthDigit = gender === 1 ? '1' : '2';
+
+//                 for (let randomDigits = 0; randomDigits <= 9; randomDigits++) { // Modified this line
+//                     const randomPart = randomDigits.toString(); // Modified this line
+//                     insertFn(`${prefix}${fourthDigit}${formattedYear}${formattedMonth}${randomPart}`);
+//                 }
+//             }
+//         }
+//     }
+// }
+// let dbClient
+// if (config.LOAD_TEST) {
+//     dbClient = sql.open("postgres", "postgresql://postgres:postgres@localhost:5432/k6?sslmode=disable");
+// }
+// function setupLoadTest() {
+//     dbClient.exec("DROP TABLE IF EXISTS test");
+//     console.log('inserting 12000 nips for load test');
+//     dbClient.exec(`CREATE TABLE IF NOT EXISTS test 
+//     (
+//         nip int8 PRIMARY KEY, 
+//         is_used BOOLEAN DEFAULT FALSE NOT NULL,
+//         is_it BOOLEAN NOT NULL,
+//         access_token TEXT
+//     )`);
+//     dbClient.exec(`CREATE INDEX IF NOT EXISTS is_used_index ON test (is_used)`);
+//     dbClient.exec(`CREATE INDEX IF NOT EXISTS is_it_index ON test (is_it)`);
+
+//     let count = 0;
+//     generateNIPs('615', (nip) => {
+//         dbClient.exec(`insert into test (nip, is_it) values (${nip}, true)`);
+//         count++;
+//         if (count % 1000 === 0) {
+//             console.log(`Inserted ${count} rows`);
+//         }
+//     })
+//     generateNIPs('303', (nip) => {
+//         dbClient.exec(`insert into test (nip, is_it) values (${nip}, false)`);
+//         count++;
+//         if (count % 1000 === 0) {
+//             console.log(`Inserted ${count} rows`);
+//         }
+//     })
 // }
 
+export function setup() {
+    // if (config.LOAD_TEST) {
+    //     setupLoadTest()
+    // }
+}
+export function teardown() {
+    // if (config.LOAD_TEST) {
+    //     // dbClient.exec("DELETE FROM test")
+    //     dbClient.close()
+    // }
+}
+
+// function getUnusedItNip(operationFn) {
+//     dbClient.query('BEGIN'); // Begin transaction
+
+//     const query = `WITH segmented_nips AS (
+//     SELECT nip, ntile(100) OVER (ORDER BY nip) AS segment
+//     FROM test
+//     WHERE is_it = true
+// )
+// SELECT nip
+// FROM segmented_nips
+// WHERE segment = $segmentNumber
+//     AND nip IN (
+//         SELECT nip FROM test WHERE is_used = false AND is_it = true
+//     )
+// FOR UPDATE SKIP LOCKED
+// LIMIT 1;`;
+// const res = dbClient.query(query);
+// if (!res || res.length === 0) {
+//     dbClient.query('ROLLBACK'); // Rollback transaction if no result
+//     return null;
+// }
+// const nip = res[0].nip;
+
+// const opRes = operationFn(nip)
+// // if (!opRes) {
+// dbClient.query('ROLLBACK'); // Rollback transaction if operation fails
+// return null;
+// // }
+
+// const updateQuery = `UPDATE test SET is_used = true WHERE nip = ${nip}`;
+// dbClient.query(updateQuery);
+
+// dbClient.query('COMMIT'); // Commit transaction
+// return nip;
+// }
 
 export default function () {
     let tags = {}
 
-    // if (config.LOAD_TEST) { } else {
-    const usr = TestRegister(config, tags)
+    // if (config.LOAD_TEST) {
+    //     getUnusedItNip((nip) => {
+    //         console.log(nip)
+    //         return false;
+    //         // const usr = TestRegister(config, tags)
+    //     })
+    // } else {
+    const usr = TestRegister(config, generateItUserNip(), tags)
     if (usr) {
         TestLogin(usr, config, tags)
         TestNurseManagementPost(config, usr, tags)
@@ -80,7 +183,7 @@ export default function () {
             TestMedicalPatientPost(config, usr, nurse, tags)
             TestMedicalPatientGet(config, usr, nurse, tags)
             TestMedicalRecordPost(config, usr, nurse, tags)
-            TestMedicalRecordPost(config, usr, nurse, tags)
+            TestMedicalRecordGet(config, usr, nurse, tags)
             TestUpload(config, usr, nurse, tags)
         }
     }
