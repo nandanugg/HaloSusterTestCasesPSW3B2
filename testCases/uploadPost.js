@@ -28,7 +28,8 @@ export function TestUpload(config, userIt, userNurse, tags) {
     }
 
     const headers = {
-        Authorization: `Bearer ${generateRandomNumber(0, 1) ? userNurse.accessToken : userIt.accessToken}`
+        Authorization: `Bearer ${generateRandomNumber(0, 1) ? userNurse.accessToken : userIt.accessToken}`,
+        ['Content-Type']: 'image/jpeg' // Set the MIME type here
     }
 
     let res;
@@ -39,14 +40,14 @@ export function TestUpload(config, userIt, userNurse, tags) {
             [currentFeature + "post upload file empty auth should return 401"]: (v) => v.status === 401
         }, config)
         // Negative case, empty file 
-        res = http.post(currentRoute, {}, { headers }, tags);
+        res = http.post(currentRoute, {}, headers, tags);
         assert(res, 'POST', {}, currentFeature, {
             [currentFeature + "post upload file empty file should return 400"]: (v) => v.status === 400
         }, config)
     }
 
     // Positive case, upload file
-    res = http.post(currentRoute, positivePayload, { headers }, tags);
+    res = http.post(currentRoute, positivePayload, headers, tags);
     assert(res, 'POST', positivePayload, currentFeature, {
         [currentFeature + "correct file should return 200"]: (v) => v.status === 200,
         [currentFeature + "correct file should have imageUrl"]: (v) => isExists(v, "data.imageUrl"),
