@@ -7,7 +7,7 @@ import { assert, isExists } from '../helpers/assertion.js';
 // Prepare the payload using the file to be uploaded
 var positivePayload = {
     // eslint-disable-next-line no-undef
-    file: http.file(open('../figure/image15KB.jpg', 'b'), 'image1.jpg'),
+    file: http.file(open('../figure/image15KB.jpg', 'b'), 'image1.jpg', 'image/jpeg'),
 };
 
 /**
@@ -29,8 +29,6 @@ export function TestUpload(config, userIt, userNurse, tags) {
 
     const headers = {
         Authorization: `Bearer ${generateRandomNumber(0, 1) ? userNurse.accessToken : userIt.accessToken}`,
-        ['Content-Type']: 'image/jpeg',
-        ['Accept']: 'multipart/form-data'
     }
 
     let res;
