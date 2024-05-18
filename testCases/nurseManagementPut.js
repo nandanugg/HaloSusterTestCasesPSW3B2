@@ -80,7 +80,7 @@ export function TestNurseManagementPut(config, user, tags) {
 
         testPutJsonAssert(currentFeature, "edit with the existing nip", currentRoute,
             combine(nurseManagementPositivePayload, { nip: itUserToTry.nip }), headers, {
-            ['should return 404']: (res) => res.status === 404,
+            ['should return 409']: (res) => res.status === 409,
         }, config, tags);
     }
 
