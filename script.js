@@ -166,7 +166,10 @@ export default function () {
     //         // const usr = TestRegister(config, tags)
     //     })
     // } else {
-    const usr = TestRegister(config, generateItUserNip(), tags)
+    let usr
+    for (let index = 0; index < 5; index++) {
+        usr = TestRegister(config, generateItUserNip(), tags)
+    }
     if (usr) {
         TestLogin(usr, config, tags)
         TestNurseManagementPost(config, usr, tags)
