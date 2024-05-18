@@ -127,6 +127,10 @@ export function combine(obj, obj2) {
     return Object.assign(clone(obj), obj2);
 }
 
+export function generateBoolFromPercentage(percentage) {
+    return Math.random() <= percentage;
+}
+
 /**
  * Generates test objects based on a given schema and a valid template.
  * The function creates a list of violations, which are test cases that violate the rules defined in the schema.
@@ -271,3 +275,4 @@ export function generateTestObjects(schema, validTemplate) {
 
     return violations;
 }
+

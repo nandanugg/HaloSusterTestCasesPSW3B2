@@ -29,7 +29,8 @@ export function TestUpload(config, userIt, userNurse, tags) {
 
     const headers = {
         Authorization: `Bearer ${generateRandomNumber(0, 1) ? userNurse.accessToken : userIt.accessToken}`,
-        ['Content-Type']: 'image/jpeg' // Set the MIME type here
+        ['Content-Type']: 'image/jpeg',
+        ['Accept']: 'multipart/form-data'
     }
 
     let res;
