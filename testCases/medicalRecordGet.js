@@ -1,8 +1,8 @@
 import { fail } from "k6";
 import { isEqualWith, isExists, isOrdered, isTotalDataInRange, isValidDate } from "../helpers/assertion.js";
-import { testGetAssert } from "../helpers/request.js";
+import { testGetAssert, testPostJsonAssert } from "../helpers/request.js";
 import { isItUserValid, isNurseUserValid } from "../types/user.js";
-import { generateRandomNumber } from "../helpers/generator.js";
+import { generateRandomDescription, generateRandomNumber } from "../helpers/generator.js";
 /**
  * 
  * @param {import("../config.js").Config} config 
@@ -30,6 +30,31 @@ export function TestMedicalRecordGet(config, userIt, userNurse, tags) {
             ['should return 401']: (res) => res.status === 401,
         }, config, tags);
     }
+    if (!config.LOAD_TEST) {
+        const paginationRes = testGetAssert(currentFeature, "get all patient", `${config.BASE_URL}/v1/medical/patient`, { limit: config.LOAD_TEST ? 10 : 1000 }, headers, {
+            ['should return 200']: (res) => res.status === 200,
+        }, config, tags);
+
+        if (!paginationRes.isSuccess) {
+            fail(currentFeature, "get all patient", paginationRes.res, config, tags)
+        }
+        const patients = paginationRes.res.json().data
+
+        for (let index = 0; index < 10; index++) {
+            /** @type {import("../types/medicalRecord.js").Patient[]} */
+            const patientToTry = patients[generateRandomNumber(0, patients.length - 1)]
+
+            const medicalRecordPositivePayload = {
+                identityNumber: patientToTry.identityNumber,
+                symptoms: generateRandomDescription(2000),
+                medications: generateRandomDescription(2000),
+            }
+            testPostJsonAssert(currentFeature, "add medical record", currentRoute, medicalRecordPositivePayload, headers, {
+                ['should return 201']: (res) => res.status === 201,
+            }, config, tags);
+        }
+    }
+
 
     testGetAssert(currentFeature, "get all record", currentRoute, {}, headers, {
         ['should return 200']: (res) => res.status === 200,
