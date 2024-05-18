@@ -75,7 +75,7 @@ export function TestMedicalRecordGet(config, userIt, userNurse, tags) {
         ['should not have more than 5 result']: (res) => isTotalDataInRange(res, 'data[]', 1, 5),
     }, config, tags);
 
-    testGetAssert(currentFeature, "get all record with createdBy.userId", currentRoute, { 'createdBy.userid': userToTry.userId }, headers, {
+    testGetAssert(currentFeature, "get all record with createdBy.userId", currentRoute, { 'createdBy.userId': userToTry.userId }, headers, {
         ['should return 200']: (res) => res.status === 200,
         ['should all have a identityDetail']: (res) => isExists(res, "data[].identityDetail"),
         ['should all have a identityDetail.identityNumber']: (res) => isExists(res, "data[].identityDetail.identityNumber"),
