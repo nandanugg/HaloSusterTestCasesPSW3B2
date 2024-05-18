@@ -1,15 +1,15 @@
 
 .PHONY: run_debug
 run_debug:
-	DEBUG_ALL=true ./k6 run script.js > output.txt 2>&1
+	DEBUG_ALL=true k6 run script.js > output.txt 2>&1
 
 .PHONY: run
 run:
-	./k6 run script.js
+	k6 run script.js
 
 .PHONY: runLoadTest
 runLoadTest:
-	LOAD_TEST=true ./k6 run script.js
+	LOAD_TEST=true k6 run script.js
 
 start_db:
 	docker run --name k6_postgres \
