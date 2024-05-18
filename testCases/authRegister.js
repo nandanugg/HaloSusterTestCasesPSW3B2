@@ -49,7 +49,7 @@ export function TestRegister(config, nip, tags) {
     }
     if (res.isSuccess) {
         const user = res.res.json().data
-        return combine(registerPositivePayload, { user })
+        return combine(registerPositivePayload, user)
     }
     return null
 }

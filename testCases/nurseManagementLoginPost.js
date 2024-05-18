@@ -36,5 +36,5 @@ export function TestNurseManagementLoginPost(config, userNurseToLogin, tags) {
         fail(currentFeature, "login with correct payload", res.res, config, tags)
     }
     const user = res.res.json().data
-    return combine(positivePayload, { user })
+    return combine(positivePayload, user)
 }
