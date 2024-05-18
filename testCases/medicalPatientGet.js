@@ -72,7 +72,7 @@ export function TestMedicalPatientGet(config, userIt, userNurse, tags) {
     }, config, tags);
 
     if (!config.LOAD_TEST) {
-        testGetAssert(currentFeature, "get all patient with identityNumber", currentRoute, { identityNumber: `${medicalPatientPositivePayload.identityNumber}`.substring(0, 4) }, headers, {
+        testGetAssert(currentFeature, "get all patient with identityNumber", currentRoute, { identityNumber: medicalPatientPositivePayload.identityNumber }, headers, {
             ['should return 200']: (res) => res.status === 200,
             ['should all have a identityNumber']: (res) => isExists(res, "data[].identityNumber"),
             ['should all have phoneNumber']: (res) => isExists(res, "data[].phoneNumber"),
@@ -82,7 +82,7 @@ export function TestMedicalPatientGet(config, userIt, userNurse, tags) {
             ['should all have a createdAt']: (res) => isExists(res, "data[].createdAt"),
             ['should have createdAt and format should be date']: (res) => isEqualWith(res, 'data[].createdAt', (v) => v.every(a => isValidDate(a))),
             ['should not have more than 5 result']: (res) => isTotalDataInRange(res, 'data[]', 1, 5),
-            ['should have result with four digit of searched identityNumber in it']: (res) => isEqualWith(res, 'data[].identityNumber', (v) => v.every(a => `${a}`.includes(`${medicalPatientPositivePayload.identityNumber}`.substring(0, 4)))),
+            ['should have result with four digit of searched identityNumber in it']: (res) => isEqualWith(res, 'data[].identityNumber', (v) => v.every(a => `${a}`.includes(medicalPatientPositivePayload.identityNumber))),
         }, config, tags);
     }
 
