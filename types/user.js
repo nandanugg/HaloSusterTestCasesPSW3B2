@@ -40,6 +40,7 @@ export function isItUserValid(usr) {
         if (
             typeof usr === 'object' &&
             typeof usr.nip === 'number' && `${usr.nip}`.startsWith('615') &&
+            typeof usr.userId === 'string' &&
             typeof usr.password === 'string' &&
             typeof usr.accessToken === 'string'
         ) {
@@ -60,6 +61,7 @@ export function isNurseUserValid(usr) {
         if (
             typeof usr === 'object' &&
             typeof usr.nip === 'number' && `${usr.nip}`.startsWith('303') &&
+            typeof usr.userId === 'string' &&
             typeof usr.password === 'string' &&
             typeof usr.accessToken === 'string'
         ) {

@@ -55,7 +55,8 @@ export function TestLogin(user, config, tags) {
     }, config, tags);
 
     if (res.isSuccess) {
-        return combine(registerPositivePayload, { accessToken: res.res.json().data.accessToken })
+        const user = res.res.json().data
+        return combine(registerPositivePayload, { user })
     }
     return null
 
