@@ -33,21 +33,20 @@ export function TestNurseManagementPut(config, user, tags) {
     const getItRes = testGetAssert(currentFeature, "get all users with it role", `${config.BASE_URL}/v1/user`, { role: 'it' }, headers, {
         ['should return 200']: (res) => res.status === 200,
     }, config, tags);
-    if (!getNurseRes.isSuccess) {
-        fail(currentFeature, "get all users with nurse role", getNurseRes.res, config, tags)
+    if (!getItRes.isSuccess) {
+        fail(currentFeature, "get all users with it role", getNurseRes.res, config, tags)
     }
 
     /** @type {import("../types/user.js").NurseUser[]}*/
     const nurses = getNurseRes.res.json().data
-    const nurseToEdit = nurses[generateRandomNumber(0, nurses.length - 1)]
+    const nurseToTry = nurses[generateRandomNumber(nurses.length / 2, nurses.length - 1)]
+    const nurseToEdit = nurses[generateRandomNumber(0, nurses.length / 2 - 1)]
     const originalRoute = `${config.BASE_URL}/v1/user/nurse/`
     const currentRoute = `${originalRoute}${nurseToEdit.userId}`
 
     /** @type {import("../types/user.js").ItUser[]} */
     const itUsers = getItRes.res.json().data
     const itUserToTry = itUsers[generateRandomNumber(0, itUsers.length - 1)]
-
-
 
     const nurseManagementPositivePayload = {
         name: generateRandomName(),
@@ -79,7 +78,7 @@ export function TestNurseManagementPut(config, user, tags) {
         }, config, tags);
 
         testPutJsonAssert(currentFeature, "edit with the existing nip", currentRoute,
-            combine(nurseManagementPositivePayload, { nip: itUserToTry.nip }), headers, {
+            combine(nurseManagementPositivePayload, { nip: nurseToTry.nip }), headers, {
             ['should return 409']: (res) => res.status === 409,
         }, config, tags);
     }
