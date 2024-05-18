@@ -89,7 +89,7 @@ export function TestMedicalRecordGet(config, userIt, userNurse, tags) {
         ['should all have a createdBy']: (res) => isExists(res, "data[].createdBy"),
         ['should all have a createdBy.name']: (res) => isExists(res, "data[].createdBy.name"),
         ['should all have a createdBy.nip']: (res) => isExists(res, "data[].createdBy.nip"),
-        ['should all have a createdBy.userId']: (res) => isEqualWith(res, "data[].createdBy.userId", userToTry.userId),
+        ['should all have a createdBy.userId']: (res) => isEqualWith(res, "data[].createdBy.userId", (v) => v.every((a) => a == userToTry.userId)),
         ['should have createdAt and format should be date']: (res) => isEqualWith(res, 'data[].createdAt', (v) => v.every(a => isValidDate(a))),
         ['should not have more than 5 result']: (res) => isTotalDataInRange(res, 'data[]', 1, 5),
     }, config, tags);
