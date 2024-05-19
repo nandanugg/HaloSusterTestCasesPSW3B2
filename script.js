@@ -24,13 +24,13 @@ const stages = []
 if (config.LOAD_TEST) {
     stages.push(
         { target: 10, iterations: 1, duration: "5s" },
-        // { target: 100, iterations: 1, duration: "10s" },
-        // { target: 150, iterations: 1, duration: "20s" },
-        // { target: 200, iterations: 1, duration: "20s" },
-        // { target: 250, iterations: 1, duration: "20s" },
-        // { target: 300, iterations: 1, duration: "20s" },
-        // { target: 600, iterations: 1, duration: "20s" },
-        // { target: 1200, iterations: 1, duration: "20s" },
+        { target: 100, iterations: 1, duration: "10s" },
+        { target: 150, iterations: 1, duration: "20s" },
+        { target: 200, iterations: 1, duration: "20s" },
+        { target: 250, iterations: 1, duration: "20s" },
+        { target: 300, iterations: 1, duration: "20s" },
+        { target: 600, iterations: 1, duration: "20s" },
+        { target: 1200, iterations: 1, duration: "20s" },
     );
 } else {
     stages.push({
