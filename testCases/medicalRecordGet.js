@@ -173,7 +173,7 @@ export function TestMedicalRecordGet(config, userIt, userNurse, tags) {
             ['should have different data from offset 0']: (res) => {
                 try {
                     return res.json().data.every(e => {
-                        return paginationRes.res.json().data.every(a => a.name !== e.name)
+                        return paginationRes.res.json().data.every(a => a.createdAt !== e.createdAt)
                     })
                 } catch (error) {
                     return false
