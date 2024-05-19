@@ -23,14 +23,16 @@ type UsedUser struct {
 }
 type NipServiceServer struct {
 	pb.UnsafeNIPServiceServer
-	itNIPs        []uint64
-	nurseNIPs     []uint64
-	maxItNIPs     int
-	maxNurseNIPs  int
-	usedNurses    []UsedUser
-	usedITs       []UsedUser
-	itNipIndex    *ItNipIndex
-	nurseNipIndex *NurseNipIndex
+	itNIPs         []uint64
+	nurseNIPs      []uint64
+	maxItNIPs      int
+	maxNurseNIPs   int
+	usedNurses     []UsedUser
+	usedITs        []UsedUser
+	itUsedIndex    *ItUsedIndex
+	nurseUsedIndex *NurseUsedIndex
+	itNipIndex     *ItNipIndex
+	nurseNipIndex  *NurseNipIndex
 }
 
 func (s *NipServiceServer) PostUsedNurse(ctx context.Context, req *pb.PostUsedAcc) (*emptypb.Empty, error) {
@@ -38,13 +40,14 @@ func (s *NipServiceServer) PostUsedNurse(ctx context.Context, req *pb.PostUsedAc
 		Nip:      req.Nip,
 		Password: req.Password,
 	})
+	s.nurseUsedIndex.Add()
 
 	return nil, nil
 }
 
 // Implement the GetItNip method
 func (s *NipServiceServer) GetUsedNurse(ctx context.Context, req *emptypb.Empty) (*pb.PostUsedAcc, error) {
-	usr := s.usedNurses[generateRandomNumber(0, len(s.usedNurses)-1)]
+	usr := s.usedNurses[generateRandomNumber(0, int(s.nurseUsedIndex.Value()))]
 	return &pb.PostUsedAcc{
 		Nip:      usr.Nip,
 		Password: usr.Password,
@@ -56,13 +59,14 @@ func (s *NipServiceServer) PostUsedIT(ctx context.Context, req *pb.PostUsedAcc) 
 		Nip:      req.Nip,
 		Password: req.Password,
 	})
+	s.itUsedIndex.Add()
 
 	return nil, nil
 }
 
 // Implement the GetItNip method
 func (s *NipServiceServer) GetUsedIt(ctx context.Context, req *emptypb.Empty) (*pb.PostUsedAcc, error) {
-	usr := s.usedITs[generateRandomNumber(0, len(s.usedITs)-1)]
+	usr := s.usedITs[generateRandomNumber(0, int(s.itUsedIndex.Value()))]
 	return &pb.PostUsedAcc{
 		Nip:      usr.Nip,
 		Password: usr.Password,
@@ -85,6 +89,44 @@ func (s *NipServiceServer) GetNurseNip(ctx context.Context, req *emptypb.Empty) 
 	return &pb.GetNipResponse{
 		Nip: s.nurseNIPs[i],
 	}, nil
+}
+
+func NewItUsedNipMutex(mtx *sync.Mutex) *ItUsedIndex {
+	return &ItUsedIndex{Mutex: mtx}
+}
+
+type ItUsedIndex struct {
+	*sync.Mutex
+	val uint64
+}
+
+func (c *ItUsedIndex) Add() {
+	c.Lock()
+	c.val += 1
+	c.Unlock()
+}
+
+func (c *ItUsedIndex) Value() uint64 {
+	return c.val
+}
+
+func NewNurseUsedMutex(mtx *sync.Mutex) *NurseUsedIndex {
+	return &NurseUsedIndex{Mutex: mtx}
+}
+
+type NurseUsedIndex struct {
+	*sync.Mutex
+	val uint64
+}
+
+func (c *NurseUsedIndex) Add() {
+	c.Lock()
+	c.val += 1
+	c.Unlock()
+}
+
+func (c *NurseUsedIndex) Value() uint64 {
+	return c.val
 }
 
 func NewItNipMutex(mtx *sync.Mutex, max uint64) *ItNipIndex {
@@ -143,13 +185,17 @@ func main() {
 	server := grpc.NewServer()
 	var nipMutex sync.Mutex
 	var itMutex sync.Mutex
+	var usedNurseMutex sync.Mutex
+	var usedItMutex sync.Mutex
 	srv := &NipServiceServer{
-		itNIPs:        itNIPs,
-		nurseNIPs:     nurseNIPs,
-		itNipIndex:    NewItNipMutex(&itMutex, uint64(maxItNIPs)),
-		nurseNipIndex: NewNurseNipMutex(&nipMutex, uint64(maxNurseNIPs)),
-		maxItNIPs:     maxItNIPs,
-		maxNurseNIPs:  maxNurseNIPs,
+		itNIPs:         itNIPs,
+		nurseNIPs:      nurseNIPs,
+		itNipIndex:     NewItNipMutex(&itMutex, uint64(maxItNIPs)),
+		nurseNipIndex:  NewNurseNipMutex(&nipMutex, uint64(maxNurseNIPs)),
+		maxItNIPs:      maxItNIPs,
+		maxNurseNIPs:   maxNurseNIPs,
+		itUsedIndex:    NewItUsedNipMutex(&usedItMutex),
+		nurseUsedIndex: NewNurseUsedMutex(&usedNurseMutex),
 	}
 	pb.RegisterNIPServiceServer(server, srv)
 
