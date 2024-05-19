@@ -37,6 +37,7 @@ export function TestNurseManagementLoginPost(config, userNurseToLogin, tags) {
         'should return 200': (res) => res.status === 200
     }, config, tags);
     if (!res.isSuccess) {
+        console.log("login with correct payload err:", positivePayload, res.res.json())
         fail(currentFeature, "login with correct payload", res.res, config, tags)
     }
     const user = res.res.json().data

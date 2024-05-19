@@ -159,11 +159,11 @@ export default function () {
                         TestUpload(positiveConfig, usrIt, usrNurse, tags)
                         PostUsedNurse(client, usrNurse)
                         if (generateBoolFromPercentage(.8)) {
-                            TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags)
+                            loop(() => TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags), 5)
                             TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
                         }
                         if (generateBoolFromPercentage(.5)) {
-                            TestMedicalRecordPost(positiveConfig, usrIt, usrNurse, tags)
+                            loop(() => TestMedicalRecordPost(positiveConfig, usrIt, usrNurse, tags), 5)
                             TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags)
                         }
                     }
@@ -198,11 +198,11 @@ export default function () {
                         TestUpload(positiveConfig, usrIt, usrNurse, tags)
                         PostUsedNurse(client, usrNurse)
                         if (generateBoolFromPercentage(.8)) {
-                            TestMedicalPatientPost(config, usrIt, usrNurse, tags)
+                            loop(() => TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags), 5)
                             TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
                         }
                         if (generateBoolFromPercentage(.5)) {
-                            TestMedicalRecordPost(config, usrIt, usrNurse, tags)
+                            loop(() => TestMedicalRecordPost(config, usrIt, usrNurse, tags), 5)
                             TestMedicalRecordGet(config, usrIt, usrNurse, tags)
                         }
                     }
@@ -213,11 +213,11 @@ export default function () {
                     TestUpload(config, usrIt, usrNurse, tags)
                     PostUsedNurse(client, usrNurse)
                     if (generateBoolFromPercentage(.8)) {
-                        TestMedicalPatientPost(config, usrIt, usrNurse, tags)
+                        loop(() => TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags), 5)
                         TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
                     }
                     if (generateBoolFromPercentage(.5)) {
-                        TestMedicalRecordPost(config, usrIt, usrNurse, tags)
+                        loop(() => TestMedicalRecordPost(config, usrIt, usrNurse, tags), 5)
                         TestMedicalRecordGet(config, usrIt, usrNurse, tags)
                     }
                 }
