@@ -44,7 +44,7 @@ func (s *NipServiceServer) PostUsedNurse(ctx context.Context, req *pb.PostUsedAc
 
 // Implement the GetItNip method
 func (s *NipServiceServer) GetUsedNurse(ctx context.Context, req *emptypb.Empty) (*pb.PostUsedAcc, error) {
-	usr := s.usedNurses[generateRandomNumber(0, len(s.usedITs)-1)]
+	usr := s.usedNurses[generateRandomNumber(0, len(s.usedNurses)-1)]
 	return &pb.PostUsedAcc{
 		Nip:      usr.Nip,
 		Password: usr.Password,
