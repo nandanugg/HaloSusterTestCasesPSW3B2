@@ -125,7 +125,7 @@ export function TestMedicalPatientGet(config, userIt, userNurse, tags) {
         ['should not have more than 2 result']: (res) => isTotalDataInRange(res, 'data[]', 1, 2),
     }, config, tags);
 
-    if (paginationRes.isSuccess) {
+    if (paginationRes.isSuccess && !config.LOAD_TEST) {
         testGetAssert(currentFeature, "get all patient with limit and offset", currentRoute, { limit: 2, offset: 2 }, headers, {
             ['should return 200']: (res) => res.status === 200,
             ['should all have a identityNumber']: (res) => isExists(res, "data[].identityNumber"),

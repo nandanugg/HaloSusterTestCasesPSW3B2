@@ -16,10 +16,10 @@ const nurseManagemenetNegativePayload = (positivePayload) => generateTestObjects
  * @param {import("../types/user.js").ItUser} user
  */
 export function TestNurseManagementPut(config, user, newNip, tags) {
+    const currentFeature = "nurse management put"
     if (!isItUserValid(user)) {
         fail(`${currentFeature} Invalid user object`)
     }
-    const currentFeature = "nurse management put"
     const headers = {
         Authorization: `Bearer ${user.accessToken}`
     }

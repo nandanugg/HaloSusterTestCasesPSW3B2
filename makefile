@@ -19,5 +19,12 @@ build_pb:
 		--go_opt=paths=source_relative \
 		--go-grpc_out=entity/pb \
 		--go-grpc_opt=paths=source_relative *.proto
+
+compile_be:
+	GOOS=linux GOARCH=amd64 go build -o main main.go
+
+run_compiled_be:
+	./main
+
 run_be:
 	go run main.go

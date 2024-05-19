@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"math/rand"
 	"net"
 	"strconv"
 	"sync"
@@ -16,14 +17,56 @@ import (
 )
 
 // Define a struct to implement the NIPServiceServer interface
+type UsedUser struct {
+	Nip      uint64
+	Password string
+}
 type NipServiceServer struct {
 	pb.UnsafeNIPServiceServer
 	itNIPs        []uint64
 	nurseNIPs     []uint64
 	maxItNIPs     int
 	maxNurseNIPs  int
+	usedNurses    []UsedUser
+	usedITs       []UsedUser
 	itNipIndex    *ItNipIndex
 	nurseNipIndex *NurseNipIndex
+}
+
+func (s *NipServiceServer) PostUsedNurse(ctx context.Context, req *pb.PostUsedAcc) (*emptypb.Empty, error) {
+	s.usedNurses = append(s.usedNurses, UsedUser{
+		Nip:      req.Nip,
+		Password: req.Password,
+	})
+
+	return nil, nil
+}
+
+// Implement the GetItNip method
+func (s *NipServiceServer) GetUsedNurse(ctx context.Context, req *emptypb.Empty) (*pb.PostUsedAcc, error) {
+	usr := s.usedNurses[generateRandomNumber(0, len(s.usedITs)-1)]
+	return &pb.PostUsedAcc{
+		Nip:      usr.Nip,
+		Password: usr.Password,
+	}, nil
+}
+
+func (s *NipServiceServer) PostUsedIT(ctx context.Context, req *pb.PostUsedAcc) (*emptypb.Empty, error) {
+	s.usedITs = append(s.usedITs, UsedUser{
+		Nip:      req.Nip,
+		Password: req.Password,
+	})
+
+	return nil, nil
+}
+
+// Implement the GetItNip method
+func (s *NipServiceServer) GetUsedIt(ctx context.Context, req *emptypb.Empty) (*pb.PostUsedAcc, error) {
+	usr := s.usedITs[generateRandomNumber(0, len(s.usedITs)-1)]
+	return &pb.PostUsedAcc{
+		Nip:      usr.Nip,
+		Password: usr.Password,
+	}, nil
 }
 
 // Implement the GetItNip method
@@ -57,7 +100,7 @@ type ItNipIndex struct {
 func (c *ItNipIndex) Add() {
 	c.Lock()
 	if c.val < c.max {
-		c.val++
+		c.val += uint64(generateRandomNumber(1, 100))
 	}
 	c.Unlock()
 }
@@ -79,7 +122,7 @@ type NurseNipIndex struct {
 func (c *NurseNipIndex) Add() {
 	c.Lock()
 	if c.val < c.max {
-		c.val++
+		c.val += uint64(generateRandomNumber(1, 100))
 	}
 	c.Unlock()
 }
@@ -120,6 +163,10 @@ func main() {
 	}
 }
 
+func generateRandomNumber(min, max int) int {
+	return rand.Intn(max-min+1) + min
+}
+
 func generateNIPs(prefix string) []uint64 {
 	currentYear := time.Now().Year()
 	res := []uint64{}
@@ -130,8 +177,11 @@ func generateNIPs(prefix string) []uint64 {
 			monthStr := fmt.Sprintf("%02d", month)
 			for gender := 1; gender <= 2; gender++ {
 				genderStr := strconv.Itoa(gender)
-				for randomDigits := 0; randomDigits <= 999; randomDigits++ {
+				for randomDigits := 0; randomDigits <= 99999; randomDigits++ {
 					randomPart := strconv.Itoa(randomDigits)
+					if len(randomPart) < 3 {
+						randomPart = fmt.Sprintf("%03s", randomPart)
+					}
 					nipStr := prefix + genderStr + yearStr + monthStr + randomPart
 					nip, err := strconv.ParseUint(nipStr, 10, 64)
 					handleErr(err)

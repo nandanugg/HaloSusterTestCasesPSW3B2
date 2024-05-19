@@ -1,7 +1,7 @@
 import { fail } from "k6";
 import { combine, generateTestObjects } from "../helpers/generator.js";
 import { testPostJsonAssert } from "../helpers/request.js";
-import { isItUserValid } from "../types/user.js";
+import { isUserValidLogin } from "../types/user.js";
 import { isExists } from "../helpers/assertion.js";
 
 const registerNegativePayloads = (positivePayload) => generateTestObjects({
@@ -19,7 +19,7 @@ const registerNegativePayloads = (positivePayload) => generateTestObjects({
 export function TestLogin(user, config, newNip, tags) {
     const currentRoute = `${config.BASE_URL}/v1/user/it/login`
     const currentFeature = "login"
-    if (!isItUserValid(user)) {
+    if (!isUserValidLogin(user)) {
         fail(`${currentFeature} Invalid user object`)
     }
 

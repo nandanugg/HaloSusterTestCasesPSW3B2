@@ -19,12 +19,12 @@ const nurseManagemenetNegativePayload = (positivePayload) => generateTestObjects
  * @returns {import("../types/user.js").NurseUserWithoutAccess | null}
  */
 export function TestNurseManagementPost(config, user, nip, tags) {
+    const currentRoute = `${config.BASE_URL}/v1/user/nurse/register`
+    const currentFeature = "nurse management post"
     if (!isItUserValid(user)) {
         fail(`${currentFeature} Invalid user object`)
     }
 
-    const currentRoute = `${config.BASE_URL}/v1/user/nurse/register`
-    const currentFeature = "nurse management post"
     /** @type {import("../helpers/request.js").RequestAssertResponse} */
     let res;
     const headers = {

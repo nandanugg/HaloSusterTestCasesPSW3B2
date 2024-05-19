@@ -9,11 +9,11 @@ import { isItUserValid } from "../types/user.js";
  * @param {import("../types/user.js").ItUser} user
  */
 export function TestNurseManagementGet(config, user, tags) {
+    const currentRoute = `${config.BASE_URL}/v1/user`
+    const currentFeature = "nurse management get"
     if (!isItUserValid(user)) {
         fail(`${currentFeature} Invalid user object`)
     }
-    const currentRoute = `${config.BASE_URL}/v1/user`
-    const currentFeature = "nurse management get"
     /** @type {import("../helpers/request.js").RequestAssertResponse} */
     const headers = {
         Authorization: `Bearer ${user.accessToken}`
@@ -90,7 +90,7 @@ export function TestNurseManagementGet(config, user, tags) {
         ['should have return ordered by oldest first']: (res) => isOrdered(res, 'data[].createdAt', 'asc', (v) => new Date(v)),
     }, config, tags);
 
-    const paginationRes = testGetAssert(currentFeature, "get all users with limit", currentRoute, { limit: config.LOAD_TEST ? 10 : 2 }, headers, {
+    const paginationRes = testGetAssert(currentFeature, "get all users with limit", currentRoute, { limit: 2 }, headers, {
         ['should return 200']: (res) => res.status === 200,
         ['should all have a userId']: (res) => isExists(res, "data[].userId"),
         ['should all have a nip']: (res) => isExists(res, "data[].nip"),
@@ -100,7 +100,7 @@ export function TestNurseManagementGet(config, user, tags) {
         ['should not have more than 2 result']: (res) => isTotalDataInRange(res, 'data[]', 1, 2),
     }, config, tags);
 
-    if (paginationRes.isSuccess) {
+    if (paginationRes.isSuccess && !config.LOAD_TEST) {
         testGetAssert(currentFeature, "get all users with limit and offset", currentRoute, { limit: 2, offset: 2 }, headers, {
             ['should return 200']: (res) => res.status === 200,
             ['should all have a userId']: (res) => isExists(res, "data[].userId"),

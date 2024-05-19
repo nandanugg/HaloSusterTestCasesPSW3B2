@@ -11,6 +11,7 @@ const { generateRandomNumber } = require("../helpers/generator.js");
  * @param {import("../types/user.js").ItUser} user
  */
 export function TestNurseManagementDelete(config, user, tags) {
+    const currentFeature = "nurse management delete"
     if (!isItUserValid(user)) {
         fail(`${currentFeature} Invalid user object`)
     }
@@ -18,7 +19,6 @@ export function TestNurseManagementDelete(config, user, tags) {
         Authorization: `Bearer ${user.accessToken}`
     }
 
-    const currentFeature = "nurse management delete"
     const getNurseRes = testGetAssert(currentFeature, "get all users with nurse role", `${config.BASE_URL}/v1/user`, { role: 'nurse' }, headers, {
         ['should return 200']: (res) => res.status === 200,
     }, config, tags);

@@ -1,6 +1,7 @@
 import { fail } from "k6";
 import { combine, generateTestObjects } from "../helpers/generator.js";
 import { testPostJsonAssert } from "../helpers/request.js";
+import { isUserValidLogin } from "../types/user.js";
 
 const nurseAccesstNegativePayload = (positivePayload) => generateTestObjects({
     nip: { type: "number", notNull: true },
@@ -16,6 +17,9 @@ const nurseAccesstNegativePayload = (positivePayload) => generateTestObjects({
 export function TestNurseManagementLoginPost(config, userNurseToLogin, tags) {
     const currentFeature = "nurse management login"
     const currentRoute = `${config.BASE_URL}/v1/user/nurse/login`
+    if (isUserValidLogin(userNurseToLogin)) {
+        fail(`${currentFeature} Invalid user object`)
+    }
     const positivePayload = {
         nip: userNurseToLogin.nip,
         password: userNurseToLogin.password

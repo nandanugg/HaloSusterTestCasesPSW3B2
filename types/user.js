@@ -51,6 +51,21 @@ export function isItUserValid(usr) {
         return false;
     }
 }
+export function isUserValidLogin(usr) {
+    try {
+        if (
+            typeof usr === 'object' &&
+            typeof usr.nip === 'number' && `${usr.nip}`.startsWith('615') &&
+            typeof usr.password === 'string'
+        ) {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        return false;
+    }
+}
+/**
 /**
  * validate validate nurse user object
  * @param {NurseUser} usr 
