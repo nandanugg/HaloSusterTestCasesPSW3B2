@@ -144,7 +144,7 @@ client.load([''], 'backend.proto');
 export default function () {
     client.connect('localhost:50051', {});
     const data = {};
-    const response = client.invoke('pb.NIPService/GetItNip', data);
+    const response = client.invoke('NIPService/GetItNip', data);
     check(response, {
         'status is OK': (r) => r && r.status === grpc.StatusOK,
     });

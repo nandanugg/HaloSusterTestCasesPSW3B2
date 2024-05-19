@@ -51,8 +51,12 @@ func (s *NipServiceServer) GetNurseNip(ctx context.Context, req *emptypb.Empty) 
 	}, nil
 }
 
+func NewItNipMutex(mtx *sync.Mutex) *ItNipIndex {
+	return &ItNipIndex{Mutex: mtx}
+}
+
 type ItNipIndex struct {
-	sync.Mutex
+	*sync.Mutex
 	val uint64
 }
 
@@ -66,8 +70,12 @@ func (c *ItNipIndex) Value() uint64 {
 	return c.val
 }
 
+func NewNurseNipMutex(mtx *sync.Mutex) *NurseNipIndex {
+	return &NurseNipIndex{Mutex: mtx}
+}
+
 type NurseNipIndex struct {
-	sync.Mutex
+	*sync.Mutex
 	val uint64
 }
 
@@ -89,9 +97,13 @@ func main() {
 	fmt.Println("Generated NIPs!")
 
 	server := grpc.NewServer()
+	var nipMutex sync.Mutex
+	var itMutex sync.Mutex
 	srv := &NipServiceServer{
-		itNIPs:    itNIPs,
-		nurseNIPs: nurseNIPs,
+		itNIPs:        itNIPs,
+		nurseNIPs:     nurseNIPs,
+		itNipIndex:    NewItNipMutex(&itMutex),
+		nurseNipIndex: NewNurseNipMutex(&nipMutex),
 	}
 	pb.RegisterNIPServiceServer(server, srv)
 
