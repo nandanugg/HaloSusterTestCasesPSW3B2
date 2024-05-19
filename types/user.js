@@ -92,6 +92,5 @@ export function generateNipSuffix() {
     if (`${identifier}`.length < 3) {
         identifier = `${identifier}`.padStart(3, '0');
     }
-    console.log(identifier)
     return `${gender}${year}${month}${identifier}`;
 }
