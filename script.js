@@ -94,7 +94,6 @@ function PostUsedIt(cli, payload) {
         nip: payload.nip,
         password: payload.password
     });
-    sleep(1)
 }
 
 function PostUsedNurse(cli, payload) {
@@ -102,7 +101,6 @@ function PostUsedNurse(cli, payload) {
         nip: payload.nip,
         password: payload.password
     });
-    sleep(1)
 }
 
 function loop(fn, times) {
@@ -118,7 +116,17 @@ export default function () {
         client.connect('127.0.0.1:50051', {
             plaintext: true
         });
+
         if (determineStage() == 1) { // 0
+
+            // prewarmup
+            loop(() => {
+                usrIt = TestRegister(positiveConfig, GetItNip(client), tags)
+                if (usrIt) {
+                    PostUsedIt(client, usrIt)
+                }
+            }, 10)
+
             let usrIt;
             usrIt = TestRegister(config, GetItNip(client), tags)
             if (usrIt) {
