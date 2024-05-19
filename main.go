@@ -181,7 +181,7 @@ func generateNIPs(prefix string) []uint64 {
 			monthStr := fmt.Sprintf("%02d", month)
 			for gender := 1; gender <= 2; gender++ {
 				genderStr := strconv.Itoa(gender)
-				for randomDigits := 0; randomDigits <= 99999; randomDigits++ {
+				for randomDigits := 0; randomDigits <= 9999; randomDigits++ {
 					randomPart := strconv.Itoa(randomDigits)
 					if len(randomPart) < 3 {
 						randomPart = fmt.Sprintf("%03s", randomPart)
