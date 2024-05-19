@@ -124,9 +124,6 @@ export default function () {
         });
 
         if (determineStage() == 1) { // 0
-
-
-
             let usrIt;
             usrIt = TestRegister(config, GetItNip(client), tags)
             if (usrIt) {
