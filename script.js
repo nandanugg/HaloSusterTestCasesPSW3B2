@@ -63,7 +63,7 @@ export function setup() {
 
     // prewarmup
     loop(() => {
-        usrIt = TestRegister(positiveConfig, GetItNip(client), tags)
+        usrIt = TestRegister(positiveConfig, GetItNip(client), {})
         if (usrIt) {
             PostUsedIt(client, usrIt)
         }
