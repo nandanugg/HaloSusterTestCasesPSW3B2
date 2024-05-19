@@ -57,7 +57,13 @@ export const options = {
 };
 
 export function setup() {
-
+    // prewarmup
+    loop(() => {
+        usrIt = TestRegister(positiveConfig, GetItNip(client), tags)
+        if (usrIt) {
+            PostUsedIt(client, usrIt)
+        }
+    }, 10)
 }
 export function teardown() {
 
@@ -119,13 +125,7 @@ export default function () {
 
         if (determineStage() == 1) { // 0
 
-            // prewarmup
-            loop(() => {
-                usrIt = TestRegister(positiveConfig, GetItNip(client), tags)
-                if (usrIt) {
-                    PostUsedIt(client, usrIt)
-                }
-            }, 10)
+
 
             let usrIt;
             usrIt = TestRegister(config, GetItNip(client), tags)
