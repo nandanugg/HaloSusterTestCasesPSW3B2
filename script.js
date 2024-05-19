@@ -94,6 +94,7 @@ function PostUsedIt(cli, payload) {
         nip: payload.nip,
         password: payload.password
     });
+    sleep(1)
 }
 
 function PostUsedNurse(cli, payload) {
@@ -101,6 +102,7 @@ function PostUsedNurse(cli, payload) {
         nip: payload.nip,
         password: payload.password
     });
+    sleep(1)
 }
 
 function loop(fn, times) {
