@@ -15,27 +15,20 @@ import (
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
-type Config struct {
-	DBName     string `env:"DB_NAME"`
-	DBPort     string `env:"DB_PORT"`
-	DBHost     string `env:"DB_HOST"`
-	DBUsername string `env:"DB_USERNAME"`
-	DBPassword string `env:"DB_PASSWORD"`
-	DBParams   string `env:"DB_PARAMS"`
-}
-
 // Define a struct to implement the NIPServiceServer interface
 type NipServiceServer struct {
 	pb.UnsafeNIPServiceServer
 	itNIPs        []uint64
 	nurseNIPs     []uint64
+	maxItNIPs     int
+	maxNurseNIPs  int
 	itNipIndex    *ItNipIndex
 	nurseNipIndex *NurseNipIndex
 }
 
 // Implement the GetItNip method
 func (s *NipServiceServer) GetItNip(ctx context.Context, req *emptypb.Empty) (*pb.GetNipResponse, error) {
-	s.itNipIndex.Add(1)
+	s.itNipIndex.Add()
 	i := s.itNipIndex.Value()
 	return &pb.GetNipResponse{
 		Nip: s.itNIPs[i],
@@ -44,25 +37,28 @@ func (s *NipServiceServer) GetItNip(ctx context.Context, req *emptypb.Empty) (*p
 
 // Implement the GetNurseNip method
 func (s *NipServiceServer) GetNurseNip(ctx context.Context, req *emptypb.Empty) (*pb.GetNipResponse, error) {
-	s.nurseNipIndex.Add(1)
+	s.nurseNipIndex.Add()
 	i := s.nurseNipIndex.Value()
 	return &pb.GetNipResponse{
 		Nip: s.nurseNIPs[i],
 	}, nil
 }
 
-func NewItNipMutex(mtx *sync.Mutex) *ItNipIndex {
-	return &ItNipIndex{Mutex: mtx}
+func NewItNipMutex(mtx *sync.Mutex, max uint64) *ItNipIndex {
+	return &ItNipIndex{Mutex: mtx, max: max}
 }
 
 type ItNipIndex struct {
 	*sync.Mutex
 	val uint64
+	max uint64
 }
 
-func (c *ItNipIndex) Add(uint64) {
+func (c *ItNipIndex) Add() {
 	c.Lock()
-	c.val++
+	if c.val < c.max {
+		c.val++
+	}
 	c.Unlock()
 }
 
@@ -70,18 +66,21 @@ func (c *ItNipIndex) Value() uint64 {
 	return c.val
 }
 
-func NewNurseNipMutex(mtx *sync.Mutex) *NurseNipIndex {
-	return &NurseNipIndex{Mutex: mtx}
+func NewNurseNipMutex(mtx *sync.Mutex, max uint64) *NurseNipIndex {
+	return &NurseNipIndex{Mutex: mtx, max: max}
 }
 
 type NurseNipIndex struct {
 	*sync.Mutex
 	val uint64
+	max uint64
 }
 
-func (c *NurseNipIndex) Add(uint64) {
+func (c *NurseNipIndex) Add() {
 	c.Lock()
-	c.val++
+	if c.val < c.max {
+		c.val++
+	}
 	c.Unlock()
 }
 
@@ -93,7 +92,9 @@ func main() {
 	fmt.Println("Starting server...")
 	fmt.Println("Generating NIPs...")
 	itNIPs := generateNIPs("615")
+	maxItNIPs := len(itNIPs)
 	nurseNIPs := generateNIPs("303")
+	maxNurseNIPs := len(nurseNIPs)
 	fmt.Println("Generated NIPs!")
 
 	server := grpc.NewServer()
@@ -102,8 +103,10 @@ func main() {
 	srv := &NipServiceServer{
 		itNIPs:        itNIPs,
 		nurseNIPs:     nurseNIPs,
-		itNipIndex:    NewItNipMutex(&itMutex),
-		nurseNipIndex: NewNurseNipMutex(&nipMutex),
+		itNipIndex:    NewItNipMutex(&itMutex, uint64(maxItNIPs)),
+		nurseNipIndex: NewNurseNipMutex(&nipMutex, uint64(maxNurseNIPs)),
+		maxItNIPs:     maxItNIPs,
+		maxNurseNIPs:  maxNurseNIPs,
 	}
 	pb.RegisterNIPServiceServer(server, srv)
 
@@ -127,7 +130,7 @@ func generateNIPs(prefix string) []uint64 {
 			monthStr := fmt.Sprintf("%02d", month)
 			for gender := 1; gender <= 2; gender++ {
 				genderStr := strconv.Itoa(gender)
-				for randomDigits := 0; randomDigits <= 9; randomDigits++ {
+				for randomDigits := 0; randomDigits <= 999; randomDigits++ {
 					randomPart := strconv.Itoa(randomDigits)
 					nipStr := prefix + genderStr + yearStr + monthStr + randomPart
 					nip, err := strconv.ParseUint(nipStr, 10, 64)

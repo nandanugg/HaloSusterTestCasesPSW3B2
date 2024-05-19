@@ -1,7 +1,7 @@
 import { fail } from "k6";
 import { combine, generateTestObjects } from "../helpers/generator.js";
 import { testPostJsonAssert } from "../helpers/request.js";
-import { generateItUserNip, isItUserValid } from "../types/user.js";
+import { isItUserValid } from "../types/user.js";
 import { isExists } from "../helpers/assertion.js";
 
 const registerNegativePayloads = (positivePayload) => generateTestObjects({
@@ -13,9 +13,10 @@ const registerNegativePayloads = (positivePayload) => generateTestObjects({
  * @param {import("../config.js").Config} config 
  * @param {Object} tags 
  * @param {import("../types/user.js").ItUser} user
+ * @param {number} newNip
  * @returns {import("../types/user.js").ItUser | null}
  */
-export function TestLogin(user, config, tags) {
+export function TestLogin(user, config, newNip, tags) {
     const currentRoute = `${config.BASE_URL}/v1/user/it/login`
     const currentFeature = "login"
     if (!isItUserValid(user)) {
@@ -40,7 +41,7 @@ export function TestLogin(user, config, tags) {
         });
         testPostJsonAssert(currentFeature, "not existing nip", currentRoute,
             combine(registerPositivePayload, {
-                nip: generateItUserNip()
+                nip: newNip
             }), {}, {
             ['should return 404']: (res) => res.status === 404,
         }, config, tags);

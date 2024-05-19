@@ -1,6 +1,6 @@
 import { fail } from "k6";
 import { testGetAssert, testPutJsonAssert } from "../helpers/request.js";
-import { generateNurseUserNip, isItUserValid } from "../types/user.js";
+import { isItUserValid } from "../types/user.js";
 import { isEqual, isExists } from "../helpers/assertion.js";
 const { generateTestObjects, generateRandomName, generateRandomNumber, combine } = require("../helpers/generator.js");
 
@@ -12,9 +12,10 @@ const nurseManagemenetNegativePayload = (positivePayload) => generateTestObjects
  * 
  * @param {import("../config.js").Config} config 
  * @param {Object} tags 
+ * @param {number} newNip
  * @param {import("../types/user.js").ItUser} user
  */
-export function TestNurseManagementPut(config, user, tags) {
+export function TestNurseManagementPut(config, user, newNip, tags) {
     if (!isItUserValid(user)) {
         fail(`${currentFeature} Invalid user object`)
     }
@@ -50,7 +51,7 @@ export function TestNurseManagementPut(config, user, tags) {
 
     const nurseManagementPositivePayload = {
         name: generateRandomName(),
-        nip: generateNurseUserNip()
+        nip: newNip
     }
 
     if (!config.POSITIVE_CASE) {

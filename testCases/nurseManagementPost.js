@@ -1,7 +1,7 @@
 import { fail } from "k6";
 import { isExists } from "../helpers/assertion.js";
 import { testPostJsonAssert } from "../helpers/request.js";
-import { generateNurseUserNip, isItUserValid } from "../types/user.js";
+import { isItUserValid } from "../types/user.js";
 
 const { generateTestObjects, generateRandomImageUrl, generateRandomName } = require("../helpers/generator.js");
 
@@ -15,9 +15,10 @@ const nurseManagemenetNegativePayload = (positivePayload) => generateTestObjects
  * @param {import("../config.js").Config} config 
  * @param {Object} tags 
  * @param {import("../types/user.js").ItUser} user
+ * @param {number} nip
  * @returns {import("../types/user.js").NurseUserWithoutAccess | null}
  */
-export function TestNurseManagementPost(config, user, tags) {
+export function TestNurseManagementPost(config, user, nip, tags) {
     if (!isItUserValid(user)) {
         fail(`${currentFeature} Invalid user object`)
     }
@@ -32,7 +33,7 @@ export function TestNurseManagementPost(config, user, tags) {
 
     const nurseManagementPositivePayload = {
         name: generateRandomName(),
-        nip: generateNurseUserNip(),
+        nip: nip,
         identityCardScanImg: generateRandomImageUrl()
     }
 
