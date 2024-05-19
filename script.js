@@ -57,6 +57,10 @@ export const options = {
 };
 
 export function setup() {
+    client.connect('127.0.0.1:50051', {
+        plaintext: true
+    });
+
     // prewarmup
     loop(() => {
         usrIt = TestRegister(positiveConfig, GetItNip(client), tags)
@@ -64,6 +68,7 @@ export function setup() {
             PostUsedIt(client, usrIt)
         }
     }, 10)
+    client.close()
 }
 export function teardown() {
 
