@@ -17,6 +17,7 @@ import { TestNurseManagementLoginPost } from './testCases/nurseManagementLoginPo
 import { TestUpload } from './testCases/uploadPost.js';
 import { generateItUserNip } from './types/user.js';
 import { TestMedicalRecordGet } from './testCases/medicalRecordGet.js';
+import grpc from 'k6/net/grpc';
 
 const stages = []
 
@@ -55,25 +56,6 @@ export const options = {
     stages,
 };
 
-// function generateNIPs(prefix, insertFn) {
-//     const currentYear = new Date().getFullYear();
-
-//     for (let year = 2000; year <= currentYear; year++) {
-//         for (let month = 1; month <= 12; month++) {
-//             const formattedYear = year.toString().substring(2);
-//             const formattedMonth = month < 10 ? `0${month}` : month.toString();
-
-//             for (let gender = 1; gender <= 2; gender++) {
-//                 const fourthDigit = gender === 1 ? '1' : '2';
-
-//                 for (let randomDigits = 0; randomDigits <= 9; randomDigits++) { // Modified this line
-//                     const randomPart = randomDigits.toString(); // Modified this line
-//                     insertFn(`${prefix}${fourthDigit}${formattedYear}${formattedMonth}${randomPart}`);
-//                 }
-//             }
-//         }
-//     }
-// }
 // let dbClient
 // if (config.LOAD_TEST) {
 //     dbClient = sql.open("postgres", "postgresql://postgres:postgres@localhost:5432/k6?sslmode=disable");
@@ -156,8 +138,18 @@ export function teardown() {
 // return nip;
 // }
 
+const client = new grpc.Client();
+client.load([''], 'backend.proto');
+
 export default function () {
-    let tags = {}
+    client.connect('localhost:50051', {});
+    const data = {};
+    const response = client.invoke('pb.NIPService/GetItNip', data);
+    check(response, {
+        'status is OK': (r) => r && r.status === grpc.StatusOK,
+    });
+
+    // let tags = {}
 
     // if (config.LOAD_TEST) {
     //     getUnusedItNip((nip) => {
@@ -166,30 +158,30 @@ export default function () {
     //         // const usr = TestRegister(config, tags)
     //     })
     // } else {
-    let usr
-    for (let index = 0; index < 5; index++) {
-        usr = TestRegister(config, generateItUserNip(), tags)
-    }
-    if (usr) {
-        TestLogin(usr, config, tags)
-        TestNurseManagementPost(config, usr, tags)
-        TestNurseManagementGet(config, usr, tags)
-        TestNurseManagementPut(config, usr, tags)
-        TestNurseManagementDelete(config, usr, tags)
-        const positiveConfig = combine(config, {
-            POSITIVE_CASE: true
-        })
-        const rawNurse = TestNurseManagementPost(positiveConfig, usr, tags)
-        const accessNurse = TestNurseManagementAccessPost(config, usr, rawNurse, tags)
-        const nurse = TestNurseManagementLoginPost(config, accessNurse, tags)
-        if (nurse) {
-            TestMedicalPatientPost(config, usr, nurse, tags)
-            TestMedicalPatientGet(config, usr, nurse, tags)
-            TestMedicalRecordPost(config, usr, nurse, tags)
-            TestMedicalRecordGet(config, usr, nurse, tags)
-            TestUpload(config, usr, nurse, tags)
-        }
-    }
+    // let usr
+    // for (let index = 0; index < 5; index++) {
+    //     usr = TestRegister(config, generateItUserNip(), tags)
+    // }
+    // if (usr) {
+    //     TestLogin(usr, config, tags)
+    //     TestNurseManagementPost(config, usr, tags)
+    //     TestNurseManagementGet(config, usr, tags)
+    //     TestNurseManagementPut(config, usr, tags)
+    //     TestNurseManagementDelete(config, usr, tags)
+    //     const positiveConfig = combine(config, {
+    //         POSITIVE_CASE: true
+    //     })
+    //     const rawNurse = TestNurseManagementPost(positiveConfig, usr, tags)
+    //     const accessNurse = TestNurseManagementAccessPost(config, usr, rawNurse, tags)
+    //     const nurse = TestNurseManagementLoginPost(config, accessNurse, tags)
+    //     if (nurse) {
+    //         TestMedicalPatientPost(config, usr, nurse, tags)
+    //         TestMedicalPatientGet(config, usr, nurse, tags)
+    //         TestMedicalRecordPost(config, usr, nurse, tags)
+    //         TestMedicalRecordGet(config, usr, nurse, tags)
+    //         TestUpload(config, usr, nurse, tags)
+    //     }
+    // }
     sleep(1)
     // }
 }

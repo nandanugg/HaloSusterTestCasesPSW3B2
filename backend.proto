@@ -1,31 +1,17 @@
 syntax = "proto3";
 
-package halo.suster.testcases;
+package pb;
 
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/nandanugg/main";
+option go_package = "entity/pb";
 
-message InitDataRequest {
-}
-message InitDataResponse {
-}
-enum NipState {
-    PROCESS = 0;
-    FINISH_UNUSED = 1;
-    FINISH_USED = 2;
-}
-message GetUnusedNipRequest {
-    bool is_it = 1;
-    bool is_used = 2;
-    NipState state = 3;
-}
-message GetUnusedNipResponse {
-    int64 nip = 1;
+message GetNipResponse {
+    uint64 nip = 1;
 }
 
 service NIPService {
-    rpc InitData (InitDataRequest) returns (google.protobuf.Empty);
-    rpc StreamNIP (stream GetUnusedNipRequest) returns (stream GetUnusedNipResponse);
+    rpc GetItNip (google.protobuf.Empty) returns (GetNipResponse);
+    rpc GetNurseNip (google.protobuf.Empty) returns (GetNipResponse);
 }
 
