@@ -63,7 +63,7 @@ export function setup() {
 
     // prewarmup
     loop(() => {
-        usrIt = TestRegister(positiveConfig, GetItNip(client), {})
+        const usrIt = TestRegister(positiveConfig, GetItNip(client), {})
         if (usrIt) {
             PostUsedIt(client, usrIt)
         }
