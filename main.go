@@ -165,7 +165,7 @@ func main() {
 
 func generateRandomNumber(min, max int) int {
 	fin := max - min + 1
-	if fin == 0 {
+	if fin <= 0 {
 		return 1
 	}
 	return rand.Intn(max-min+1) + min
