@@ -24,13 +24,13 @@ const stages = []
 if (config.LOAD_TEST) {
     stages.push(
         { target: 50, iterations: 1, duration: "5s" },
-        // { target: 100, iterations: 1, duration: "10s" },
-        // { target: 150, iterations: 1, duration: "20s" },
-        // { target: 200, iterations: 1, duration: "20s" },
-        // { target: 250, iterations: 1, duration: "20s" },
-        // { target: 300, iterations: 1, duration: "20s" },
-        // { target: 600, iterations: 1, duration: "20s" },
-        // { target: 1200, iterations: 1, duration: "20s" },
+        { target: 100, iterations: 1, duration: "10s" },
+        { target: 150, iterations: 1, duration: "20s" },
+        { target: 200, iterations: 1, duration: "20s" },
+        { target: 250, iterations: 1, duration: "20s" },
+        { target: 300, iterations: 1, duration: "20s" },
+        { target: 600, iterations: 1, duration: "20s" },
+        { target: 1200, iterations: 1, duration: "20s" },
     );
 } else {
     stages.push({
@@ -87,7 +87,6 @@ client.load([], 'backend.proto');
 
 function GetItNip(cli) {
     const response = cli.invoke('pb.NIPService/GetItNip', {});
-    console.log('GetItNip response:', response.message)
     return parseInt(response.message.nip)
 }
 function GetNurseNip(cli) {
@@ -106,18 +105,10 @@ function GetUsedIt(cli) {
 }
 
 function PostUsedIt(cli, payload) {
-    console.log('PostUsedIt payload:', payload)
-    const res = cli.invoke('pb.NIPService/PostUsedIT', {
+    cli.invoke('pb.NIPService/PostUsedIT', {
         nip: payload.nip,
         password: payload.password
     });
-    if (res.status !== grpc.StatusOK) {
-        console.log(`PostUsedIt failed with status ${res.status}`);
-        console.log(res.message)
-    } else {
-        console.log(`PostUsedIt success with status ${res.status}`);
-        console.log(res.message)
-    }
 }
 
 function PostUsedNurse(cli, payload) {
