@@ -23,7 +23,7 @@ const stages = []
 
 if (config.LOAD_TEST) {
     stages.push(
-        { target: 2, iterations: 1, duration: "5s" },
+        { target: 1, iterations: 1, duration: "5s" },
         // { target: 100, iterations: 1, duration: "10s" },
         // { target: 150, iterations: 1, duration: "20s" },
         // { target: 200, iterations: 1, duration: "20s" },
