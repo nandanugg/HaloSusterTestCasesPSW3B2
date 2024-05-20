@@ -10,7 +10,7 @@ func (c *NipService) GetItNip() uint64 {
 	c.itIndexMutex.Lock()
 	defer c.IncrementItNipUsedIndex()
 	defer c.itIndexMutex.Unlock()
-	return c.itNIPs[c.itUsedIndexNIP-2]
+	return c.itNIPs[c.itUsedIndexNIP]
 }
 
 func (c *NipService) ResetItNipUsedIndex() {
