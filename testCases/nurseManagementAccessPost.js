@@ -45,9 +45,13 @@ export function TestNurseManagementAccessPost(config, userIt, tags) {
         });
     }
 
-    testPostJsonAssert(currentFeature, "give nurse access", currentRoute, positivePayload, headers, {
+    const res = testPostJsonAssert(currentFeature, "give nurse access", currentRoute, positivePayload, headers, {
         'should return 200': (res) => res.status === 200
     }, config, tags);
+
+    if (!res.isSuccess) {
+        fail(currentFeature, "give nurse access error", res.res, config, tags)
+    }
 
     return combine(nurseToTry, positivePayload)
 }

@@ -64,5 +64,5 @@ export function TestNurseManagementPost(config, user, nip, tags) {
     if (res.isSuccess) {
         return nurseManagementPositivePayload
     }
-    return null
+    fail(currentFeature, "register nurse error", res.res, config, tags)
 }
