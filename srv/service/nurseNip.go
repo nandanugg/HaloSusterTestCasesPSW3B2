@@ -8,7 +8,7 @@ func (c *NipService) GetNurseNip() uint64 {
 	c.nurseIndexMutex.Lock()
 	defer c.IncrementItNipUsedIndex()
 	defer c.nurseIndexMutex.Unlock()
-	return c.nurseNIPs[c.nurseUsedIndexNIP-1]
+	return c.nurseNIPs[c.nurseUsedIndexNIP-2]
 }
 
 func (c *NipService) ResetNurseNipUsedIndex() {
