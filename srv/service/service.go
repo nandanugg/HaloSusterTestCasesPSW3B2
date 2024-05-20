@@ -14,12 +14,14 @@ type NipService struct {
 	nurseNIPs             []uint64
 	itUsedIndexNIP        uint64
 	nurseUsedIndexNIP     uint64
+	itUsedAccountCount    int
+	nurseUsedAccountCount int
 	itUsedAccount         []entity.UsedUser
 	nurseUsedAccount      []entity.UsedUser
 	itIndexMutex          *sync.Mutex
 	nurseIndexMutex       *sync.Mutex
-	itUsedAccountMutex    *sync.Mutex
-	nurseUsedAccountMutex *sync.Mutex
+	itUsedAccountMutex    *sync.RWMutex
+	nurseUsedAccountMutex *sync.RWMutex
 }
 
 // Create a new NipServiceServer
@@ -27,8 +29,8 @@ func NewNipService(
 	itNIPs, nurseNIPs []uint64,
 	itIndexMutex *sync.Mutex,
 	nurseIndexMutex *sync.Mutex,
-	itUsedAccountMutex *sync.Mutex,
-	nurseUsedAccountMutex *sync.Mutex,
+	itUsedAccountMutex *sync.RWMutex,
+	nurseUsedAccountMutex *sync.RWMutex,
 ) *NipService {
 	return &NipService{
 		itNIPs:                itNIPs,
