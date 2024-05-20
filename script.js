@@ -63,7 +63,7 @@ export function setup() {
             plaintext: true
         });
         for (let i = 0; i < 5; i++) {
-            let usrIt = TestRegister(config, GetItNip(client), {})
+            let usrIt = TestRegister(positiveConfig, GetItNip(client), {})
             if (usrIt) {
                 console.log('usrIt success:', usrIt)
                 PostUsedIt(client, usrIt)
