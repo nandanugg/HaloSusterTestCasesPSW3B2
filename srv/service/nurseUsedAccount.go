@@ -1,8 +1,13 @@
 package service
 
-import "github.com/nandanugg/HaloSusterTestCasesPSW3B2/entity"
+import (
+	"fmt"
+
+	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/entity"
+)
 
 func (c *NipService) AddNurseUsedAccount(usr entity.UsedUser) {
+	fmt.Println("AddNurseUsedAccount: ", usr)
 	c.nurseUsedAccountMutex.Lock()
 	c.nurseUsedAccount = append(c.nurseUsedAccount, usr)
 	c.nurseUsedAccountMutex.Unlock()

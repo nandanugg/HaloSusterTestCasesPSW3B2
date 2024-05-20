@@ -1,13 +1,12 @@
 package service
 
 func (c *NipService) IncrementItNipUsedIndex() {
-	c.itIndexMutex.Lock()
-	c.itUsedIndexNIP += uint64(GenerateRandomNumber(1, 100))
-	c.itIndexMutex.Unlock()
+	c.itUsedIndexNIP += uint64(GenerateRandomNumber(1, 5))
 }
 
 func (c *NipService) GetItNip() uint64 {
 	c.itIndexMutex.Lock()
+	defer c.IncrementItNipUsedIndex()
 	defer c.itIndexMutex.Unlock()
 	return c.itNIPs[c.itUsedIndexNIP]
 }
