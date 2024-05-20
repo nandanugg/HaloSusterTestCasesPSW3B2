@@ -1,7 +1,7 @@
 package service
 
 import (
-	"math/rand"
+	"math/rand/v2"
 	"sync"
 
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/entity"
@@ -42,5 +42,5 @@ func NewNipService(
 }
 
 func GenerateRandomNumber(min, max int) int {
-	return rand.Intn(max-min+1) + min
+	return rand.IntN(max-min+1) + min
 }

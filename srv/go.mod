@@ -1,6 +1,6 @@
 module github.com/nandanugg/HaloSusterTestCasesPSW3B2
 
-go 1.21.6
+go 1.22.3
 
 require (
 	google.golang.org/grpc v1.64.0
