@@ -24,8 +24,8 @@ func main() {
 	server := grpc.NewServer()
 	var nipMutex sync.Mutex
 	var itMutex sync.Mutex
-	var usedItMutex sync.RWMutex
-	var usedNurseMutex sync.RWMutex
+	var usedItMutex sync.Mutex
+	var usedNurseMutex sync.Mutex
 
 	handler := handler.NewRequestHandler(service.NewNipService(
 		itNIPs,
