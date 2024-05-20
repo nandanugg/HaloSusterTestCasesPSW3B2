@@ -17,8 +17,7 @@ func (c *NipService) AddItUsedAccount(usr entity.UsedUser) {
 func (c *NipService) GetItUsedAccount() entity.UsedUser {
 	c.itUsedAccountMutex.RLock()
 	defer c.itUsedAccountMutex.RUnlock()
-	choosenIndex := rand.IntN(len(c.itUsedAccount))
-	return c.itUsedAccount[choosenIndex]
+	return c.itUsedAccount[rand.IntN(len(c.itUsedAccount)-1)]
 }
 
 func (c *NipService) ResetItUsedAccount() {
