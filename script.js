@@ -141,359 +141,359 @@ export default function () {
             plaintext: true
         });
 
-        if (determineStage() == 1) { // 0
-            let usrIt;
-            usrIt = TestRegister(config, GetItNip(client), tags)
-            if (usrIt) {
-                PostUsedIt(client, usrIt)
-                usrIt = TestLogin(usrIt, positiveConfig, GetItNip(client), tags)
+        // if (determineStage() == 1) { // 0
+        //     let usrIt;
+        //     usrIt = TestRegister(config, GetItNip(client), tags)
+        //     if (usrIt) {
+        //         PostUsedIt(client, usrIt)
+        //         usrIt = TestLogin(usrIt, positiveConfig, GetItNip(client), tags)
 
-                loop(() => TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags), 8)
-                loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 10)
+        //         loop(() => TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags), 8)
+        //         loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 10)
 
-                if (generateBoolFromPercentage(.2)) {
-                    TestNurseManagementPut(positiveConfig, usrIt, GetNurseNip(client), tags)
-                    TestNurseManagementDelete(config, usrIt, tags)
-                }
-            }
-        }
-        else if (determineStage() == 2) { // 50
-            let usrIt;
-            let usrNurse;
-            if (generateBoolFromPercentage(.2)) {
-                const regUsr = TestRegister(config, GetItNip(client), tags)
-                PostUsedIt(client, regUsr)
-            }
-            usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
-            if (usrIt) {
-                if (generateBoolFromPercentage(.5)) {
-                    TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
-                }
-                loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 15)
+        //         if (generateBoolFromPercentage(.2)) {
+        //             TestNurseManagementPut(positiveConfig, usrIt, GetNurseNip(client), tags)
+        //             TestNurseManagementDelete(config, usrIt, tags)
+        //         }
+        //     }
+        // }
+        // else if (determineStage() == 2) { // 50
+        //     let usrIt;
+        //     let usrNurse;
+        //     if (generateBoolFromPercentage(.2)) {
+        //         const regUsr = TestRegister(config, GetItNip(client), tags)
+        //         PostUsedIt(client, regUsr)
+        //     }
+        //     usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
+        //     if (usrIt) {
+        //         if (generateBoolFromPercentage(.5)) {
+        //             TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
+        //         }
+        //         loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 15)
 
-                if (generateBoolFromPercentage(.2)) {
-                    TestNurseManagementPut(positiveConfig, usrIt, GetNurseNip(client), tags)
-                    TestNurseManagementDelete(positiveConfig, usrIt, tags)
-                }
+        //         if (generateBoolFromPercentage(.2)) {
+        //             TestNurseManagementPut(positiveConfig, usrIt, GetNurseNip(client), tags)
+        //             TestNurseManagementDelete(positiveConfig, usrIt, tags)
+        //         }
 
-                const rawNurse = TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
-                if (generateBoolFromPercentage(.6)) {
-                    const accessNurse = TestNurseManagementAccessPost(config, usrIt, rawNurse, tags)
-                    usrNurse = TestNurseManagementLoginPost(positiveConfig, accessNurse, tags)
-                    if (usrNurse) {
-                        TestUpload(positiveConfig, usrIt, usrNurse, tags)
-                        PostUsedNurse(client, usrNurse)
-                        if (generateBoolFromPercentage(.8)) {
-                            loop(() => TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags), 5)
-                            TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
-                        }
-                        if (generateBoolFromPercentage(.5)) {
-                            loop(() => TestMedicalRecordPost(positiveConfig, usrIt, usrNurse, tags), 5)
-                            TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags)
-                        }
-                    }
-                }
-            }
-        }
-        else if (determineStage() == 3) { // 100
-            let usrIt;
-            let usrNurse;
-            if (generateBoolFromPercentage(.1)) {
-                const regUsr = TestRegister(config, GetItNip(client), tags)
-                PostUsedIt(client, regUsr)
-            }
-            usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
+        //         const rawNurse = TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
+        //         if (generateBoolFromPercentage(.6)) {
+        //             const accessNurse = TestNurseManagementAccessPost(config, usrIt, rawNurse, tags)
+        //             usrNurse = TestNurseManagementLoginPost(positiveConfig, accessNurse, tags)
+        //             if (usrNurse) {
+        //                 TestUpload(positiveConfig, usrIt, usrNurse, tags)
+        //                 PostUsedNurse(client, usrNurse)
+        //                 if (generateBoolFromPercentage(.8)) {
+        //                     loop(() => TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags), 5)
+        //                     TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
+        //                 }
+        //                 if (generateBoolFromPercentage(.5)) {
+        //                     loop(() => TestMedicalRecordPost(positiveConfig, usrIt, usrNurse, tags), 5)
+        //                     TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags)
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // else if (determineStage() == 3) { // 100
+        //     let usrIt;
+        //     let usrNurse;
+        //     if (generateBoolFromPercentage(.1)) {
+        //         const regUsr = TestRegister(config, GetItNip(client), tags)
+        //         PostUsedIt(client, regUsr)
+        //     }
+        //     usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
 
-            if (generateBoolFromPercentage(.3)) {
-                TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
-            }
-            loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
+        //     if (generateBoolFromPercentage(.3)) {
+        //         TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
+        //     }
+        //     loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
 
-            if (generateBoolFromPercentage(.1)) {
-                TestNurseManagementPut(config, usrIt, GetNurseNip(client), tags)
-                TestNurseManagementDelete(config, usrIt, tags)
-            }
+        //     if (generateBoolFromPercentage(.1)) {
+        //         TestNurseManagementPut(config, usrIt, GetNurseNip(client), tags)
+        //         TestNurseManagementDelete(config, usrIt, tags)
+        //     }
 
-            if (generateBoolFromPercentage(.2)) {
-                const rawNurse = TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
-                if (generateBoolFromPercentage(.6)) {
-                    const accessNurse = TestNurseManagementAccessPost(positiveConfig, usrIt, rawNurse, tags)
-                    usrNurse = TestNurseManagementLoginPost(positiveConfig, accessNurse, tags)
-                    if (usrNurse) {
-                        TestUpload(positiveConfig, usrIt, usrNurse, tags)
-                        PostUsedNurse(client, usrNurse)
-                        if (generateBoolFromPercentage(.8)) {
-                            loop(() => TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags), 5)
-                            TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
-                        }
-                        if (generateBoolFromPercentage(.5)) {
-                            loop(() => TestMedicalRecordPost(config, usrIt, usrNurse, tags), 5)
-                            TestMedicalRecordGet(config, usrIt, usrNurse, tags)
-                        }
-                    }
-                }
-            } else {
-                usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
-                if (usrNurse) {
-                    TestUpload(config, usrIt, usrNurse, tags)
-                    PostUsedNurse(client, usrNurse)
-                    if (generateBoolFromPercentage(.8)) {
-                        loop(() => TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags), 5)
-                        TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
-                    }
-                    if (generateBoolFromPercentage(.5)) {
-                        loop(() => TestMedicalRecordPost(config, usrIt, usrNurse, tags), 5)
-                        TestMedicalRecordGet(config, usrIt, usrNurse, tags)
-                    }
-                }
-            }
-        }
-        else if (determineStage() == 4) { // 150
-            let usrIt;
-            let usrNurse;
-            if (generateBoolFromPercentage(.01)) {
-                const regUsr = TestRegister(config, GetItNip(client), tags)
-                PostUsedIt(client, regUsr)
-            }
-            usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
+        //     if (generateBoolFromPercentage(.2)) {
+        //         const rawNurse = TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
+        //         if (generateBoolFromPercentage(.6)) {
+        //             const accessNurse = TestNurseManagementAccessPost(positiveConfig, usrIt, rawNurse, tags)
+        //             usrNurse = TestNurseManagementLoginPost(positiveConfig, accessNurse, tags)
+        //             if (usrNurse) {
+        //                 TestUpload(positiveConfig, usrIt, usrNurse, tags)
+        //                 PostUsedNurse(client, usrNurse)
+        //                 if (generateBoolFromPercentage(.8)) {
+        //                     loop(() => TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags), 5)
+        //                     TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
+        //                 }
+        //                 if (generateBoolFromPercentage(.5)) {
+        //                     loop(() => TestMedicalRecordPost(config, usrIt, usrNurse, tags), 5)
+        //                     TestMedicalRecordGet(config, usrIt, usrNurse, tags)
+        //                 }
+        //             }
+        //         }
+        //     } else {
+        //         usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
+        //         if (usrNurse) {
+        //             TestUpload(config, usrIt, usrNurse, tags)
+        //             PostUsedNurse(client, usrNurse)
+        //             if (generateBoolFromPercentage(.8)) {
+        //                 loop(() => TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags), 5)
+        //                 TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
+        //             }
+        //             if (generateBoolFromPercentage(.5)) {
+        //                 loop(() => TestMedicalRecordPost(config, usrIt, usrNurse, tags), 5)
+        //                 TestMedicalRecordGet(config, usrIt, usrNurse, tags)
+        //             }
+        //         }
+        //     }
+        // }
+        // else if (determineStage() == 4) { // 150
+        //     let usrIt;
+        //     let usrNurse;
+        //     if (generateBoolFromPercentage(.01)) {
+        //         const regUsr = TestRegister(config, GetItNip(client), tags)
+        //         PostUsedIt(client, regUsr)
+        //     }
+        //     usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
 
-            if (generateBoolFromPercentage(.2)) {
-                TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
-            }
-            loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
+        //     if (generateBoolFromPercentage(.2)) {
+        //         TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
+        //     }
+        //     loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
 
-            if (generateBoolFromPercentage(.01)) {
-                TestNurseManagementPut(config, usrIt, GetNurseNip(client), tags)
-                TestNurseManagementDelete(positiveConfig, usrIt, tags)
-            }
+        //     if (generateBoolFromPercentage(.01)) {
+        //         TestNurseManagementPut(config, usrIt, GetNurseNip(client), tags)
+        //         TestNurseManagementDelete(positiveConfig, usrIt, tags)
+        //     }
 
-            if (generateBoolFromPercentage(.1)) {
-                const rawNurse = TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
-                if (generateBoolFromPercentage(.6)) {
-                    const accessNurse = TestNurseManagementAccessPost(config, usrIt, rawNurse, tags)
-                    usrNurse = TestNurseManagementLoginPost(positiveConfig, accessNurse, tags)
-                    if (usrNurse) {
-                        TestUpload(positiveConfig, usrIt, usrNurse, tags)
-                        PostUsedNurse(client, usrNurse)
-                        if (generateBoolFromPercentage(.8)) {
-                            TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags)
-                            TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
-                        }
-                        if (generateBoolFromPercentage(.5)) {
-                            TestMedicalRecordPost(config, usrIt, usrNurse, tags)
-                            TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags)
-                        }
-                    }
-                }
-            } else {
-                usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
-                if (usrNurse) {
-                    TestUpload(positiveConfig, usrIt, usrNurse, tags)
-                    PostUsedNurse(client, usrNurse)
-                    if (generateBoolFromPercentage(.8)) {
-                        TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags)
-                        TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
-                    }
-                    if (generateBoolFromPercentage(.5)) {
-                        TestMedicalRecordPost(config, usrIt, usrNurse, tags)
-                        TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags)
-                    }
-                }
-            }
-        }
-        else if (determineStage() == 5) { // 200
-            let usrIt;
-            let usrNurse;
-            if (generateBoolFromPercentage(.01)) {
-                const regUsr = TestRegister(config, GetItNip(client), tags)
-                PostUsedIt(client, regUsr)
-            }
-            usrIt = TestLogin(GetUsedIt(client), config, GetItNip(client), tags)
+        //     if (generateBoolFromPercentage(.1)) {
+        //         const rawNurse = TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
+        //         if (generateBoolFromPercentage(.6)) {
+        //             const accessNurse = TestNurseManagementAccessPost(config, usrIt, rawNurse, tags)
+        //             usrNurse = TestNurseManagementLoginPost(positiveConfig, accessNurse, tags)
+        //             if (usrNurse) {
+        //                 TestUpload(positiveConfig, usrIt, usrNurse, tags)
+        //                 PostUsedNurse(client, usrNurse)
+        //                 if (generateBoolFromPercentage(.8)) {
+        //                     TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags)
+        //                     TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
+        //                 }
+        //                 if (generateBoolFromPercentage(.5)) {
+        //                     TestMedicalRecordPost(config, usrIt, usrNurse, tags)
+        //                     TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags)
+        //                 }
+        //             }
+        //         }
+        //     } else {
+        //         usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
+        //         if (usrNurse) {
+        //             TestUpload(positiveConfig, usrIt, usrNurse, tags)
+        //             PostUsedNurse(client, usrNurse)
+        //             if (generateBoolFromPercentage(.8)) {
+        //                 TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags)
+        //                 TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
+        //             }
+        //             if (generateBoolFromPercentage(.5)) {
+        //                 TestMedicalRecordPost(config, usrIt, usrNurse, tags)
+        //                 TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags)
+        //             }
+        //         }
+        //     }
+        // }
+        // else if (determineStage() == 5) { // 200
+        //     let usrIt;
+        //     let usrNurse;
+        //     if (generateBoolFromPercentage(.01)) {
+        //         const regUsr = TestRegister(config, GetItNip(client), tags)
+        //         PostUsedIt(client, regUsr)
+        //     }
+        //     usrIt = TestLogin(GetUsedIt(client), config, GetItNip(client), tags)
 
-            if (generateBoolFromPercentage(.2)) {
-                TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
-            }
-            loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
+        //     if (generateBoolFromPercentage(.2)) {
+        //         TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
+        //     }
+        //     loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
 
-            if (generateBoolFromPercentage(.01)) {
-                TestNurseManagementPut(config, usrIt, GetNurseNip(client), tags)
-                TestNurseManagementDelete(positiveConfig, usrIt, tags)
-            }
+        //     if (generateBoolFromPercentage(.01)) {
+        //         TestNurseManagementPut(config, usrIt, GetNurseNip(client), tags)
+        //         TestNurseManagementDelete(positiveConfig, usrIt, tags)
+        //     }
 
-            if (generateBoolFromPercentage(.01)) {
-                const rawNurse = TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
-                if (generateBoolFromPercentage(.6)) {
-                    const accessNurse = TestNurseManagementAccessPost(config, usrIt, rawNurse, tags)
-                    usrNurse = TestNurseManagementLoginPost(positiveConfig, accessNurse, tags)
-                    if (usrNurse) {
-                        TestUpload(config, usrIt, usrNurse, tags)
-                        PostUsedNurse(client, usrNurse)
-                        if (generateBoolFromPercentage(.8)) {
-                            TestMedicalPatientPost(config, usrIt, usrNurse, tags)
-                            TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
-                        }
-                        if (generateBoolFromPercentage(.5)) {
-                            TestMedicalRecordPost(config, usrIt, usrNurse, tags)
-                            TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags)
-                        }
-                    }
-                }
-            } else {
-                usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
-                if (usrNurse) {
-                    TestUpload(positiveConfig, usrIt, usrNurse, tags)
-                    PostUsedNurse(client, usrNurse)
-                    if (generateBoolFromPercentage(.9)) {
-                        TestMedicalPatientPost(config, usrIt, usrNurse, tags)
-                        loop(() => TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags), 10)
-                    }
-                    if (generateBoolFromPercentage(.9)) {
-                        TestMedicalRecordPost(config, usrIt, usrNurse, tags)
-                        loop(() => TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags), 10)
-                    }
-                }
-            }
-        }
-        else if (determineStage() == 6) { // 300
-            let usrIt;
-            let usrNurse;
-            if (generateBoolFromPercentage(.001)) {
-                const regUsr = TestRegister(positiveConfig, GetItNip(client), tags)
-                PostUsedIt(client, regUsr)
-            }
-            usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
+        //     if (generateBoolFromPercentage(.01)) {
+        //         const rawNurse = TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
+        //         if (generateBoolFromPercentage(.6)) {
+        //             const accessNurse = TestNurseManagementAccessPost(config, usrIt, rawNurse, tags)
+        //             usrNurse = TestNurseManagementLoginPost(positiveConfig, accessNurse, tags)
+        //             if (usrNurse) {
+        //                 TestUpload(config, usrIt, usrNurse, tags)
+        //                 PostUsedNurse(client, usrNurse)
+        //                 if (generateBoolFromPercentage(.8)) {
+        //                     TestMedicalPatientPost(config, usrIt, usrNurse, tags)
+        //                     TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags)
+        //                 }
+        //                 if (generateBoolFromPercentage(.5)) {
+        //                     TestMedicalRecordPost(config, usrIt, usrNurse, tags)
+        //                     TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags)
+        //                 }
+        //             }
+        //         }
+        //     } else {
+        //         usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
+        //         if (usrNurse) {
+        //             TestUpload(positiveConfig, usrIt, usrNurse, tags)
+        //             PostUsedNurse(client, usrNurse)
+        //             if (generateBoolFromPercentage(.9)) {
+        //                 TestMedicalPatientPost(config, usrIt, usrNurse, tags)
+        //                 loop(() => TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags), 10)
+        //             }
+        //             if (generateBoolFromPercentage(.9)) {
+        //                 TestMedicalRecordPost(config, usrIt, usrNurse, tags)
+        //                 loop(() => TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags), 10)
+        //             }
+        //         }
+        //     }
+        // }
+        // else if (determineStage() == 6) { // 300
+        //     let usrIt;
+        //     let usrNurse;
+        //     if (generateBoolFromPercentage(.001)) {
+        //         const regUsr = TestRegister(positiveConfig, GetItNip(client), tags)
+        //         PostUsedIt(client, regUsr)
+        //     }
+        //     usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
 
-            if (generateBoolFromPercentage(.2)) {
-                TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
-            }
-            loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
+        //     if (generateBoolFromPercentage(.2)) {
+        //         TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
+        //     }
+        //     loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
 
-            if (generateBoolFromPercentage(.01)) {
-                TestNurseManagementPut(positiveConfig, usrIt, GetNurseNip(client), tags)
-                TestNurseManagementDelete(positiveConfig, usrIt, tags)
-            }
+        //     if (generateBoolFromPercentage(.01)) {
+        //         TestNurseManagementPut(positiveConfig, usrIt, GetNurseNip(client), tags)
+        //         TestNurseManagementDelete(positiveConfig, usrIt, tags)
+        //     }
 
-            if (generateBoolFromPercentage(.01)) {
-                const rawNurse = TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
-                if (generateBoolFromPercentage(.6)) {
-                    const accessNurse = TestNurseManagementAccessPost(config, usrIt, rawNurse, tags)
-                    usrNurse = TestNurseManagementLoginPost(config, accessNurse, tags)
-                    if (usrNurse) {
-                        TestUpload(config, usrIt, usrNurse, tags)
-                        PostUsedNurse(client, usrNurse)
-                        if (generateBoolFromPercentage(.8)) {
-                            TestMedicalPatientPost(config, usrIt, usrNurse, tags)
-                            TestMedicalPatientGet(config, usrIt, usrNurse, tags)
-                        }
-                        if (generateBoolFromPercentage(.5)) {
-                            TestMedicalRecordPost(config, usrIt, usrNurse, tags)
-                            TestMedicalRecordGet(config, usrIt, usrNurse, tags)
-                        }
-                    }
-                }
-            } else {
-                usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
-                if (usrNurse) {
-                    TestUpload(positiveConfig, usrIt, usrNurse, tags)
-                    PostUsedNurse(client, usrNurse)
-                    if (generateBoolFromPercentage(.9)) {
-                        TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags)
-                        loop(() => TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags), 10)
-                    }
-                    if (generateBoolFromPercentage(.9)) {
-                        TestMedicalRecordPost(positiveConfig, usrIt, usrNurse, tags)
-                        loop(() => TestMedicalRecordGet(config, usrIt, usrNurse, tags), 10)
-                    }
-                }
-            }
-        }
-        else if (determineStage() == 7) { // 600
-            let usrIt;
-            let usrNurse;
-            usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
+        //     if (generateBoolFromPercentage(.01)) {
+        //         const rawNurse = TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
+        //         if (generateBoolFromPercentage(.6)) {
+        //             const accessNurse = TestNurseManagementAccessPost(config, usrIt, rawNurse, tags)
+        //             usrNurse = TestNurseManagementLoginPost(config, accessNurse, tags)
+        //             if (usrNurse) {
+        //                 TestUpload(config, usrIt, usrNurse, tags)
+        //                 PostUsedNurse(client, usrNurse)
+        //                 if (generateBoolFromPercentage(.8)) {
+        //                     TestMedicalPatientPost(config, usrIt, usrNurse, tags)
+        //                     TestMedicalPatientGet(config, usrIt, usrNurse, tags)
+        //                 }
+        //                 if (generateBoolFromPercentage(.5)) {
+        //                     TestMedicalRecordPost(config, usrIt, usrNurse, tags)
+        //                     TestMedicalRecordGet(config, usrIt, usrNurse, tags)
+        //                 }
+        //             }
+        //         }
+        //     } else {
+        //         usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
+        //         if (usrNurse) {
+        //             TestUpload(positiveConfig, usrIt, usrNurse, tags)
+        //             PostUsedNurse(client, usrNurse)
+        //             if (generateBoolFromPercentage(.9)) {
+        //                 TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags)
+        //                 loop(() => TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags), 10)
+        //             }
+        //             if (generateBoolFromPercentage(.9)) {
+        //                 TestMedicalRecordPost(positiveConfig, usrIt, usrNurse, tags)
+        //                 loop(() => TestMedicalRecordGet(config, usrIt, usrNurse, tags), 10)
+        //             }
+        //         }
+        //     }
+        // }
+        // else if (determineStage() == 7) { // 600
+        //     let usrIt;
+        //     let usrNurse;
+        //     usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
 
-            if (generateBoolFromPercentage(.01)) {
-                TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
-            }
-            loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
+        //     if (generateBoolFromPercentage(.01)) {
+        //         TestNurseManagementPost(config, usrIt, GetNurseNip(client), tags)
+        //     }
+        //     loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
 
-            if (generateBoolFromPercentage(.01)) {
-                TestNurseManagementPut(config, usrIt, GetNurseNip(client), tags)
-                TestNurseManagementDelete(config, usrIt, tags)
-            }
+        //     if (generateBoolFromPercentage(.01)) {
+        //         TestNurseManagementPut(config, usrIt, GetNurseNip(client), tags)
+        //         TestNurseManagementDelete(config, usrIt, tags)
+        //     }
 
-            usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
-            if (usrNurse) {
-                TestUpload(positiveConfig, usrIt, usrNurse, tags)
-                PostUsedNurse(client, usrNurse)
-                if (generateBoolFromPercentage(.9)) {
-                    TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags)
-                    loop(() => TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags), 30)
-                }
-                if (generateBoolFromPercentage(.9)) {
-                    TestMedicalRecordPost(config, usrIt, usrNurse, tags)
-                    loop(() => TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags), 30)
-                }
-            }
-        }
-        else if (determineStage() == 8) { // 1200
-            let usrIt;
-            let usrNurse;
-            usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
+        //     usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
+        //     if (usrNurse) {
+        //         TestUpload(positiveConfig, usrIt, usrNurse, tags)
+        //         PostUsedNurse(client, usrNurse)
+        //         if (generateBoolFromPercentage(.9)) {
+        //             TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags)
+        //             loop(() => TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags), 30)
+        //         }
+        //         if (generateBoolFromPercentage(.9)) {
+        //             TestMedicalRecordPost(config, usrIt, usrNurse, tags)
+        //             loop(() => TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags), 30)
+        //         }
+        //     }
+        // }
+        // else if (determineStage() == 8) { // 1200
+        //     let usrIt;
+        //     let usrNurse;
+        //     usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
 
-            if (generateBoolFromPercentage(.01)) {
-                TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
-            }
-            loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 30)
+        //     if (generateBoolFromPercentage(.01)) {
+        //         TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
+        //     }
+        //     loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 30)
 
-            if (generateBoolFromPercentage(.01)) {
-                TestNurseManagementPut(config, usrIt, GetNurseNip(client), tags)
-                TestNurseManagementDelete(positiveConfig, usrIt, tags)
-            }
+        //     if (generateBoolFromPercentage(.01)) {
+        //         TestNurseManagementPut(config, usrIt, GetNurseNip(client), tags)
+        //         TestNurseManagementDelete(positiveConfig, usrIt, tags)
+        //     }
 
-            usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
-            if (usrNurse) {
-                TestUpload(positiveConfig, usrIt, usrNurse, tags)
-                PostUsedNurse(client, usrNurse)
-                if (generateBoolFromPercentage(.9)) {
-                    TestMedicalPatientPost(config, usrIt, usrNurse, tags)
-                    loop(() => TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags), 50)
-                }
-                if (generateBoolFromPercentage(.9)) {
-                    TestMedicalRecordPost(config, usrIt, usrNurse, tags)
-                    loop(() => TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags), 50)
-                }
-            }
-        }
-        else {
-            let usrIt;
-            let usrNurse;
-            usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
+        //     usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
+        //     if (usrNurse) {
+        //         TestUpload(positiveConfig, usrIt, usrNurse, tags)
+        //         PostUsedNurse(client, usrNurse)
+        //         if (generateBoolFromPercentage(.9)) {
+        //             TestMedicalPatientPost(config, usrIt, usrNurse, tags)
+        //             loop(() => TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags), 50)
+        //         }
+        //         if (generateBoolFromPercentage(.9)) {
+        //             TestMedicalRecordPost(config, usrIt, usrNurse, tags)
+        //             loop(() => TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags), 50)
+        //         }
+        //     }
+        // }
+        // else {
+        //     let usrIt;
+        //     let usrNurse;
+        //     usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
 
-            if (generateBoolFromPercentage(.01)) {
-                TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
-            }
-            loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
+        //     if (generateBoolFromPercentage(.01)) {
+        //         TestNurseManagementPost(positiveConfig, usrIt, GetNurseNip(client), tags)
+        //     }
+        //     loop(() => TestNurseManagementGet(positiveConfig, usrIt, tags), 20)
 
-            if (generateBoolFromPercentage(.01)) {
-                TestNurseManagementPut(positiveConfig, usrIt, GetNurseNip(client), tags)
-                TestNurseManagementDelete(positiveConfig, usrIt, tags)
-            }
+        //     if (generateBoolFromPercentage(.01)) {
+        //         TestNurseManagementPut(positiveConfig, usrIt, GetNurseNip(client), tags)
+        //         TestNurseManagementDelete(positiveConfig, usrIt, tags)
+        //     }
 
-            usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
-            if (usrNurse) {
-                TestUpload(positiveConfig, usrIt, usrNurse, tags)
-                PostUsedNurse(client, usrNurse)
-                if (generateBoolFromPercentage(.9)) {
-                    TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags)
-                    loop(() => TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags), 80)
-                }
-                if (generateBoolFromPercentage(.9)) {
-                    TestMedicalRecordPost(positiveConfig, usrIt, usrNurse, tags)
-                    loop(() => TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags), 80)
-                }
-            }
-        }
+        //     usrNurse = TestNurseManagementLoginPost(positiveConfig, GetUsedNurse(client), tags)
+        //     if (usrNurse) {
+        //         TestUpload(positiveConfig, usrIt, usrNurse, tags)
+        //         PostUsedNurse(client, usrNurse)
+        //         if (generateBoolFromPercentage(.9)) {
+        //             TestMedicalPatientPost(positiveConfig, usrIt, usrNurse, tags)
+        //             loop(() => TestMedicalPatientGet(positiveConfig, usrIt, usrNurse, tags), 80)
+        //         }
+        //         if (generateBoolFromPercentage(.9)) {
+        //             TestMedicalRecordPost(positiveConfig, usrIt, usrNurse, tags)
+        //             loop(() => TestMedicalRecordGet(positiveConfig, usrIt, usrNurse, tags), 80)
+        //         }
+        //     }
+        // }
         client.close();
     } else {
         // client.connect('127.0.0.1:50051', {
