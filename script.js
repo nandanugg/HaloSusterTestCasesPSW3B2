@@ -125,7 +125,7 @@ export default function () {
     let tags = {}
 
     if (config.LOAD_TEST) {
-        client.connect('127.0.0.1:50051', {
+        client.connect('localhost:50051', {
             plaintext: true
         });
 
