@@ -16,6 +16,6 @@ func (c *NipService) GetNurseUsedAccount() entity.UsedUser {
 
 func (c *NipService) ResetNurseUsedAccount() {
 	c.nurseUsedAccountMutex.Lock()
-	c.nurseUsedAccount = []entity.UsedUser{}
 	defer c.nurseUsedAccountMutex.Unlock()
+	c.nurseUsedAccount = []entity.UsedUser{}
 }
