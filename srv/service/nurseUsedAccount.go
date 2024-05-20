@@ -9,7 +9,7 @@ func (c *NipService) AddNurseUsedAccount(usr entity.UsedUser) {
 }
 
 func (c *NipService) GetNurseUsedAccount() entity.UsedUser {
-	c.nurseUsedAccountMutex.RLocker()
+	c.nurseUsedAccountMutex.RLock()
 	defer c.nurseUsedAccountMutex.RUnlock()
 	return c.nurseUsedAccount[GenerateRandomNumber(0, len(c.nurseUsedAccount)-1)]
 }
