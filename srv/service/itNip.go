@@ -1,7 +1,7 @@
 package service
 
 func (c *NipService) IncrementItNipUsedIndex() {
-	c.itUsedIndexNIP++
+	c.itUsedIndexNIP += 2
 }
 
 func (c *NipService) GetItNip() uint64 {

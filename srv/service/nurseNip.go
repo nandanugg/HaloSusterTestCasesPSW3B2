@@ -1,7 +1,7 @@
 package service
 
 func (c *NipService) IncrementNurseNipUsedIndex() {
-	c.nurseUsedIndexNIP++
+	c.nurseUsedIndexNIP += 2
 }
 
 func (c *NipService) GetNurseNip() uint64 {
