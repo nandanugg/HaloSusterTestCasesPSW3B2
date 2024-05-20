@@ -3,7 +3,7 @@ package service
 import "math/rand/v2"
 
 func (c *NipService) IncrementItNipUsedIndex() {
-	c.itUsedIndexNIP += uint64(rand.IntN(5))
+	c.itUsedIndexNIP += rand.IntN(5)
 }
 
 func (c *NipService) GetItNip() uint64 {

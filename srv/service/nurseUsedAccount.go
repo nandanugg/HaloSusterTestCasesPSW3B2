@@ -1,14 +1,12 @@
 package service
 
 import (
-	"fmt"
 	"math/rand/v2"
 
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/entity"
 )
 
 func (c *NipService) AddNurseUsedAccount(usr entity.UsedUser) {
-	fmt.Println("AddNurseUsedAccount: ", usr)
 	c.nurseUsedAccountMutex.Lock()
 	c.nurseUsedAccount = append(c.nurseUsedAccount, usr)
 	c.nurseUsedAccountCount++
@@ -18,7 +16,7 @@ func (c *NipService) AddNurseUsedAccount(usr entity.UsedUser) {
 func (c *NipService) GetNurseUsedAccount() entity.UsedUser {
 	c.nurseUsedAccountMutex.Lock()
 	defer c.nurseUsedAccountMutex.Unlock()
-	choosenIndex := rand.IntN(c.nurseUsedAccountCount / 2)
+	choosenIndex := rand.IntN(c.nurseUsedAccountCount)
 	return c.nurseUsedAccount[choosenIndex]
 }
 

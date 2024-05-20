@@ -12,8 +12,8 @@ type NipService struct {
 	pb.UnsafeNIPServiceServer
 	itNIPs                []uint64
 	nurseNIPs             []uint64
-	itUsedIndexNIP        uint64
-	nurseUsedIndexNIP     uint64
+	itUsedIndexNIP        int
+	nurseUsedIndexNIP     int
 	itUsedAccountCount    int
 	nurseUsedAccountCount int
 	itUsedAccount         []entity.UsedUser
