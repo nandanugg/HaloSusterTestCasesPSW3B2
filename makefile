@@ -1,30 +1,29 @@
 
-.PHONY: run_debug
-run_debug:
+run-debug:
 	# git pull origin main;
 	DEBUG_ALL=true k6 run script.js > output.txt 2>&1;
 
-.PHONY: run
 run:
 	# git pull origin main;
 	k6 run script.js;
 
-.PHONY: runLoadTest
-runLoadTest:
+run-load-test:
 	# git pull origin main;
 	LOAD_TEST=true k6 run script.js;
 
-build_pb:
-	protoc --go_out=entity/pb \
+build-pb:
+	protoc --go_out=./srv/entity/pb \
 		--go_opt=paths=source_relative \
-		--go-grpc_out=entity/pb \
+		--go-grpc_out=./srv/entity/pb \
 		--go-grpc_opt=paths=source_relative *.proto
+tidy-go:
+	@cd ./srv && go mod tidy
 
-compile_be:
-	GOOS=linux GOARCH=amd64 go build -o ./cmd/main main.go
+compile-go:
+	@cd ./srv && GOOS=linux GOARCH=amd64 go build -o ./cmd/main ./main.go
 
-run_compiled_be:
+run-go-binary:
 	./cmd/main
 
-run_be:
-	go run main.go
+run-go:
+	@cd ./srv && go run main.go
