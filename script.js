@@ -57,7 +57,19 @@ export const options = {
 };
 
 export function setup() {
-
+    if (config.LOAD_TEST) {
+        console.log('Load test warmup, adding 5 users')
+        client.connect('127.0.0.1:50051', {
+            plaintext: true
+        });
+        for (let i = 0; i < 5; i++) {
+            let usrIt = TestRegister(config, GetItNip(client), {})
+            if (usrIt) {
+                PostUsedIt(client, usrIt)
+            }
+        }
+        client.close();
+    }
 }
 export function teardown() {
 
@@ -72,7 +84,6 @@ client.load([], 'backend.proto');
 
 function GetItNip(cli) {
     const response = cli.invoke('pb.NIPService/GetItNip', {});
-    console.log('GetItNip response:', response.message)
     return parseInt(response.message.nip)
 }
 function GetNurseNip(cli) {
@@ -91,18 +102,10 @@ function GetUsedIt(cli) {
 }
 
 function PostUsedIt(cli, payload) {
-    console.log('PostUsedIt payload:', payload)
-    const res = cli.invoke('pb.NIPService/PostUsedIT', {
+    cli.invoke('pb.NIPService/PostUsedIT', {
         nip: payload.nip,
         password: payload.password
     });
-    if (res.status !== grpc.StatusOK) {
-        console.log(`PostUsedIt failed with status ${res.status}`);
-        console.log(res.message)
-    } else {
-        console.log(`PostUsedIt success with status ${res.status}`);
-        console.log(res.message)
-    }
 }
 
 function PostUsedNurse(cli, payload) {
