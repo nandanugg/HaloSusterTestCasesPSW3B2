@@ -19,6 +19,9 @@ func (c *NipService) GetNurseUsedAccount() entity.UsedUser {
 	c.nurseUsedAccountMutex.Lock()
 	defer c.nurseUsedAccountMutex.Unlock()
 	choosenIndex := rand.IntN(c.nurseUsedAccountCount - 1)
+	if choosenIndex >= len(c.nurseUsedAccount) {
+		choosenIndex = 1
+	}
 	return c.nurseUsedAccount[choosenIndex]
 }
 
