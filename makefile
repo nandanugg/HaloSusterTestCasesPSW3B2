@@ -20,7 +20,7 @@ tidy-go:
 	@cd ./srv && go mod tidy
 
 compile-go:
-	@cd ./srv && GOOS=linux GOARCH=amd64 go build -o ./cmd/main ./main.go
+	@cd ./srv && GOOS=linux GOARCH=amd64 go build -v -o ./cmd/main ./main.go
 
 run-go-binary:
 	./cmd/main
