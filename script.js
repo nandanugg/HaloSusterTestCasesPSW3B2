@@ -65,7 +65,10 @@ export function setup() {
         for (let i = 0; i < 5; i++) {
             let usrIt = TestRegister(config, GetItNip(client), {})
             if (usrIt) {
+                console.log('usrIt success:', usrIt)
                 PostUsedIt(client, usrIt)
+            } else {
+                console.log('usrIt fail:', usrIt)
             }
         }
         client.close();
