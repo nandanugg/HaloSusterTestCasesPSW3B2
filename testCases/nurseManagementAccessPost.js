@@ -50,7 +50,7 @@ export function TestNurseManagementAccessPost(config, userIt, tags) {
     }, config, tags);
 
     if (!res.isSuccess) {
-        fail(currentFeature, "give nurse access error", res.res, config, tags)
+        fail(`${currentFeature} give nurse access error: ${res.res.body}`)
     }
 
     return combine(nurseToTry, positivePayload)

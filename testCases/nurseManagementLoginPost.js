@@ -37,7 +37,7 @@ export function TestNurseManagementLoginPost(config, userNurseToLogin, tags) {
         'should return 200': (res) => res.status === 200
     }, config, tags);
     if (!res.isSuccess) {
-        fail(currentFeature, "login nurse error", res.res, config, tags)
+        fail(`${currentFeature} login nurse error: ${res.res.body}`)
     }
     const user = res.res.json().data
     return combine(positivePayload, user)
