@@ -1,7 +1,9 @@
 package service
 
+import "math/rand/v2"
+
 func (c *NipService) IncrementNurseNipUsedIndex() {
-	c.nurseUsedIndexNIP += uint64(GenerateRandomNumber(1, 5))
+	c.nurseUsedIndexNIP += uint64(rand.IntN(5))
 }
 
 func (c *NipService) GetNurseNip() uint64 {

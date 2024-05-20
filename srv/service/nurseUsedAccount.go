@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"math/rand/v2"
 
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/entity"
 )
@@ -16,7 +17,7 @@ func (c *NipService) AddNurseUsedAccount(usr entity.UsedUser) {
 func (c *NipService) GetNurseUsedAccount() entity.UsedUser {
 	c.nurseUsedAccountMutex.RLock()
 	defer c.nurseUsedAccountMutex.RUnlock()
-	return c.nurseUsedAccount[GenerateRandomNumber(0, len(c.nurseUsedAccount)-1)]
+	return c.nurseUsedAccount[rand.IntN(len(c.nurseUsedAccount))]
 }
 
 func (c *NipService) ResetNurseUsedAccount() {

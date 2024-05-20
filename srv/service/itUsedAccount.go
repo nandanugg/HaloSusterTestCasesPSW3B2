@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"math/rand/v2"
 
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/entity"
 )
@@ -16,8 +17,7 @@ func (c *NipService) AddItUsedAccount(usr entity.UsedUser) {
 func (c *NipService) GetItUsedAccount() entity.UsedUser {
 	c.itUsedAccountMutex.RLock()
 	defer c.itUsedAccountMutex.RUnlock()
-	choosenIndex := GenerateRandomNumber(0, len(c.itUsedAccount)-1)
-	fmt.Println("choosenIndex: ", choosenIndex)
+	choosenIndex := rand.IntN(len(c.itUsedAccount))
 	return c.itUsedAccount[choosenIndex]
 }
 

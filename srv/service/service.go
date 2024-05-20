@@ -1,7 +1,6 @@
 package service
 
 import (
-	"math/rand/v2"
 	"sync"
 
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/entity"
@@ -39,8 +38,4 @@ func NewNipService(
 		itUsedAccountMutex:    itUsedAccountMutex,
 		nurseUsedAccountMutex: nurseUsedAccountMutex,
 	}
-}
-
-func GenerateRandomNumber(min, max int) int {
-	return rand.IntN(max-min+1) + min
 }
