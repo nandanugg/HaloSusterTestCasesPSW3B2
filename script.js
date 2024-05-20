@@ -153,7 +153,9 @@ export default function () {
             let usrNurse;
             if (generateBoolFromPercentage(.2)) {
                 const regUsr = TestRegister(config, GetItNip(client), tags)
-                PostUsedIt(client, regUsr)
+                if (regUsr) {
+                    PostUsedIt(client, regUsr)
+                }
             }
             usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
             if (usrIt) {
@@ -191,7 +193,9 @@ export default function () {
             let usrNurse;
             if (generateBoolFromPercentage(.1)) {
                 const regUsr = TestRegister(config, GetItNip(client), tags)
-                PostUsedIt(client, regUsr)
+                if (regUsr) {
+                    PostUsedIt(client, regUsr)
+                }
             }
             usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
 
@@ -244,7 +248,9 @@ export default function () {
             let usrNurse;
             if (generateBoolFromPercentage(.01)) {
                 const regUsr = TestRegister(config, GetItNip(client), tags)
-                PostUsedIt(client, regUsr)
+                if (regUsr) {
+                    PostUsedIt(client, regUsr)
+                }
             }
             usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
 
@@ -297,7 +303,9 @@ export default function () {
             let usrNurse;
             if (generateBoolFromPercentage(.01)) {
                 const regUsr = TestRegister(config, GetItNip(client), tags)
-                PostUsedIt(client, regUsr)
+                if (regUsr) {
+                    PostUsedIt(client, regUsr)
+                }
             }
             usrIt = TestLogin(GetUsedIt(client), config, GetItNip(client), tags)
 
@@ -350,7 +358,9 @@ export default function () {
             let usrNurse;
             if (generateBoolFromPercentage(.001)) {
                 const regUsr = TestRegister(positiveConfig, GetItNip(client), tags)
-                PostUsedIt(client, regUsr)
+                if (regUsr) {
+                    PostUsedIt(client, regUsr)
+                }
             }
             usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
 
@@ -500,6 +510,9 @@ export default function () {
         let usr
         for (let index = 0; index < 5; index++) {
             usr = TestRegister(config, generateItUserNip(), tags)
+            if (usr) {
+                PostUsedIt(client, usr)
+            }
         }
         if (usr) {
             TestLogin(usr, config, generateItUserNip(), tags)
@@ -511,6 +524,7 @@ export default function () {
             const accessNurse = TestNurseManagementAccessPost(config, usr, rawNurse, tags)
             const nurse = TestNurseManagementLoginPost(config, accessNurse, tags)
             if (nurse) {
+                PostUsedNurse(client, nurse)
                 TestMedicalPatientPost(config, usr, nurse, tags)
                 TestMedicalPatientGet(config, usr, nurse, tags)
                 TestMedicalRecordPost(config, usr, nurse, tags)
