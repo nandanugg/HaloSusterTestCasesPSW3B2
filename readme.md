@@ -16,6 +16,7 @@ BASE_URL=http://localhost:8080 make run
 Prepare the NIP Generator:
 ```bash
 # this requires at minimal, go 1.22.3
+# run in separate terminal
 make run-go
 ```
 
