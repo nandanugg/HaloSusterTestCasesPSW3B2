@@ -527,7 +527,6 @@ export default function () {
             const accessNurse = TestNurseManagementAccessPost(config, usr, rawNurse, tags)
             const nurse = TestNurseManagementLoginPost(config, accessNurse, tags)
             if (nurse) {
-                PostUsedNurse(client, nurse)
                 TestMedicalPatientPost(config, usr, nurse, tags)
                 TestMedicalPatientGet(config, usr, nurse, tags)
                 TestMedicalRecordPost(config, usr, nurse, tags)

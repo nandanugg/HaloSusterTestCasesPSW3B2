@@ -1,27 +1,29 @@
 package service
 
 import (
+	"context"
 	"sync"
 
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/entity"
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/entity/pb"
 )
 
-// Define a struct to implement the NIPServiceServer interface
+type UsedAccountRepository interface {
+	PostUsedITAccount(ctx context.Context, usr *entity.UsedUser) error
+	PostUsedNurseAccount(ctx context.Context, usr *entity.UsedUser) error
+	GetUsedITAccount(ctx context.Context) (*entity.UsedUser, error)
+	GetUsedNurseAccount(ctx context.Context) (*entity.UsedUser, error)
+}
+
 type NipService struct {
 	pb.UnsafeNIPServiceServer
-	itNIPs                []uint64
-	nurseNIPs             []uint64
-	itUsedIndexNIP        int
-	nurseUsedIndexNIP     int
-	itUsedAccountCount    int
-	nurseUsedAccountCount int
-	itUsedAccount         []entity.UsedUser
-	nurseUsedAccount      []entity.UsedUser
-	itIndexMutex          *sync.Mutex
-	nurseIndexMutex       *sync.Mutex
-	itUsedAccountMutex    *sync.RWMutex
-	nurseUsedAccountMutex *sync.RWMutex
+	itNIPs            []uint64
+	nurseNIPs         []uint64
+	itUsedIndexNIP    int
+	nurseUsedIndexNIP int
+	itIndexMutex      *sync.Mutex
+	nurseIndexMutex   *sync.Mutex
+	repo              UsedAccountRepository
 }
 
 // Create a new NipServiceServer
@@ -29,15 +31,11 @@ func NewNipService(
 	itNIPs, nurseNIPs []uint64,
 	itIndexMutex *sync.Mutex,
 	nurseIndexMutex *sync.Mutex,
-	itUsedAccountMutex *sync.RWMutex,
-	nurseUsedAccountMutex *sync.RWMutex,
 ) *NipService {
 	return &NipService{
-		itNIPs:                itNIPs,
-		nurseNIPs:             nurseNIPs,
-		itIndexMutex:          itIndexMutex,
-		nurseIndexMutex:       nurseIndexMutex,
-		itUsedAccountMutex:    itUsedAccountMutex,
-		nurseUsedAccountMutex: nurseUsedAccountMutex,
+		itNIPs:          itNIPs,
+		nurseNIPs:       nurseNIPs,
+		itIndexMutex:    itIndexMutex,
+		nurseIndexMutex: nurseIndexMutex,
 	}
 }

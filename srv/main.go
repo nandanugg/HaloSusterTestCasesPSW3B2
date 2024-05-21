@@ -1,9 +1,11 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"strconv"
 	"sync"
 	"time"
@@ -21,19 +23,34 @@ func main() {
 	nurseNIPs := generateNIPs("303")
 	fmt.Println("Generated NIPs!")
 
+	if _, err := os.Stat("usedAccount.db"); os.IsNotExist(err) {
+		file, err := os.Create("usedAccount.db")
+		if err != nil {
+			handleErr(err)
+		}
+		defer file.Close()
+		fmt.Println("Created usedAccount.db file")
+	}
+
+	db, err := sql.Open("sqlite3", "usedAccount.db")
+	handleErr(err)
+
+	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS usedAccount (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		nip TEXT NOT NULL,
+		password TEXT NOT NULL
+	)`)
+	handleErr(err)
+
 	server := grpc.NewServer()
 	var nipMutex sync.Mutex
 	var itMutex sync.Mutex
-	var usedItMutex sync.RWMutex
-	var usedNurseMutex sync.RWMutex
 
 	handler := handler.NewRequestHandler(service.NewNipService(
 		itNIPs,
 		nurseNIPs,
 		&itMutex,
 		&nipMutex,
-		&usedItMutex,
-		&usedNurseMutex,
 	))
 
 	pb.RegisterNIPServiceServer(server, handler)
