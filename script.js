@@ -510,16 +510,6 @@ export default function () {
         }
         client.close();
     } else {
-        // client.connect('127.0.0.1:50051', {
-        //     plaintext: true
-        // });
-        // let usrIt = TestRegister(config, GetItNip(client), tags)
-        // PostUsedIt(client, usrIt)
-        // usrIt = TestLogin(usrIt, positiveConfig, GetItNip(client), tags)
-
-        // usrIt = TestLogin(GetUsedIt(client), positiveConfig, GetItNip(client), tags)
-
-        // client.close();
         let usr
         for (let index = 0; index < 5; index++) {
             usr = TestRegister(config, generateItUserNip(), tags)
