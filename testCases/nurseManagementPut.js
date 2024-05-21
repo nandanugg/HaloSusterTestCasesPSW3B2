@@ -40,7 +40,7 @@ export function TestNurseManagementPut(config, user, newNip, tags) {
 
     /** @type {import("../types/user.js").NurseUser[]}*/
     const nurses = getNurseRes.res.json().data
-    const nurseToTry = nurses[generateRandomNumber(nurses.length / 2, nurses.length - 1)]
+    const nurseToTry = nurses[nurses.length - 1]
     const nurseToEdit = nurses[generateRandomNumber(0, nurses.length / 2 - 1)]
     const originalRoute = `${config.BASE_URL}/v1/user/nurse/`
     const currentRoute = `${originalRoute}${nurseToEdit.userId}`
