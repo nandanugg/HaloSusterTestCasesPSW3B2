@@ -49,3 +49,26 @@ func (r *Repository) GetUsedNurseAccount(ctx context.Context) (*entity.UsedUser,
 
 	return usedUser, nil
 }
+
+func (r *Repository) Reset(ctx context.Context) error {
+	_, err := r.db.Exec("UPDATE meta_data SET value = 0 WHERE key = 'itIndex'")
+	if err != nil {
+		return err
+	}
+	_, err = r.db.Exec("UPDATE meta_data SET value = 0 WHERE key = 'nurseIndex'")
+	if err != nil {
+		return err
+	}
+
+	_, err = r.db.Exec("DELETE FROM used_it_account")
+	if err != nil {
+		return err
+	}
+
+	_, err = r.db.Exec("DELETE FROM used_nurse_account")
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

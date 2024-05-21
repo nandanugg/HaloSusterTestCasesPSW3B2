@@ -11,7 +11,7 @@ run-load-test:
 	# git pull origin main;
 	LOAD_TEST=true k6 run script.js;
 
-build-pb:
+compile-pb:
 	protoc --go_out=./srv/entity/pb \
 		--go_opt=paths=source_relative \
 		--go-grpc_out=./srv/entity/pb \

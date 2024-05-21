@@ -75,7 +75,14 @@ export function setup() {
     }
 }
 export function teardown() {
+    if (config.LOAD_TEST) {
+        client.connect('127.0.0.1:50051', {
+            plaintext: true
+        });
 
+        Reset(client)
+        client.close();
+    }
 }
 
 const positiveConfig = combine(config, {
@@ -115,6 +122,11 @@ function PostUsedNurse(cli, payload) {
     cli.invoke('pb.NIPService/PostUsedNurse', {
         nip: payload.nip,
         password: payload.password
+    });
+}
+
+function Reset(cli) {
+    cli.invoke('pb.NIPService/ResetAll', {
     });
 }
 

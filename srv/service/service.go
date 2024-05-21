@@ -13,6 +13,7 @@ type UsedAccountRepository interface {
 	PostUsedNurseAccount(ctx context.Context, usr *entity.UsedUser) error
 	GetUsedITAccount(ctx context.Context) (*entity.UsedUser, error)
 	GetUsedNurseAccount(ctx context.Context) (*entity.UsedUser, error)
+	Reset(ctx context.Context) error
 }
 
 type NipService struct {

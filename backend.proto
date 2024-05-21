@@ -22,9 +22,6 @@ service NIPService {
     rpc PostUsedNurse (PostUsedAcc) returns (google.protobuf.Empty);
     rpc GetUsedIt (google.protobuf.Empty) returns (PostUsedAcc);
     rpc GetUsedNurse (google.protobuf.Empty) returns (PostUsedAcc);
-    rpc ResetUsedNurse (google.protobuf.Empty) returns (PostUsedAcc);
-    rpc ResetUsedIt (google.protobuf.Empty) returns (PostUsedAcc);
-    rpc ResetNurseNip (google.protobuf.Empty) returns (PostUsedAcc);
-    rpc ResetItNip (google.protobuf.Empty) returns (PostUsedAcc);
+    rpc ResetAll (google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 

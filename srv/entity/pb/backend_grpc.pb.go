@@ -26,6 +26,7 @@ const (
 	NIPService_PostUsedNurse_FullMethodName = "/pb.NIPService/PostUsedNurse"
 	NIPService_GetUsedIt_FullMethodName     = "/pb.NIPService/GetUsedIt"
 	NIPService_GetUsedNurse_FullMethodName  = "/pb.NIPService/GetUsedNurse"
+	NIPService_ResetAll_FullMethodName      = "/pb.NIPService/ResetAll"
 )
 
 // NIPServiceClient is the client API for NIPService service.
@@ -38,6 +39,7 @@ type NIPServiceClient interface {
 	PostUsedNurse(ctx context.Context, in *PostUsedAcc, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetUsedIt(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*PostUsedAcc, error)
 	GetUsedNurse(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*PostUsedAcc, error)
+	ResetAll(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type nIPServiceClient struct {
@@ -102,6 +104,15 @@ func (c *nIPServiceClient) GetUsedNurse(ctx context.Context, in *emptypb.Empty, 
 	return out, nil
 }
 
+func (c *nIPServiceClient) ResetAll(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, NIPService_ResetAll_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NIPServiceServer is the server API for NIPService service.
 // All implementations must embed UnimplementedNIPServiceServer
 // for forward compatibility
@@ -112,6 +123,7 @@ type NIPServiceServer interface {
 	PostUsedNurse(context.Context, *PostUsedAcc) (*emptypb.Empty, error)
 	GetUsedIt(context.Context, *emptypb.Empty) (*PostUsedAcc, error)
 	GetUsedNurse(context.Context, *emptypb.Empty) (*PostUsedAcc, error)
+	ResetAll(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	mustEmbedUnimplementedNIPServiceServer()
 }
 
@@ -136,6 +148,9 @@ func (UnimplementedNIPServiceServer) GetUsedIt(context.Context, *emptypb.Empty) 
 }
 func (UnimplementedNIPServiceServer) GetUsedNurse(context.Context, *emptypb.Empty) (*PostUsedAcc, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsedNurse not implemented")
+}
+func (UnimplementedNIPServiceServer) ResetAll(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResetAll not implemented")
 }
 func (UnimplementedNIPServiceServer) mustEmbedUnimplementedNIPServiceServer() {}
 
@@ -258,6 +273,24 @@ func _NIPService_GetUsedNurse_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NIPService_ResetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NIPServiceServer).ResetAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NIPService_ResetAll_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NIPServiceServer).ResetAll(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NIPService_ServiceDesc is the grpc.ServiceDesc for NIPService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -288,6 +321,10 @@ var NIPService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUsedNurse",
 			Handler:    _NIPService_GetUsedNurse_Handler,
+		},
+		{
+			MethodName: "ResetAll",
+			Handler:    _NIPService_ResetAll_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
