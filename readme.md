@@ -13,6 +13,13 @@
 BASE_URL=http://localhost:8080 make run
 ```
 #### For load testing
+Prepare the NIP Generator:
 ```bash
-BASE_URL=http://localhost:8080 make runAllTestCase
+# this requires at minimal, go 1.22.3
+make run-go
+```
+
+Then run:
+```bash
+BASE_URL=http://localhost:8080 make run-test-case
 ```
