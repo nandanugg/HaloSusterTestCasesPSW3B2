@@ -9,7 +9,12 @@ import (
 )
 
 func (s *Handler) GetUsedIt(ctx context.Context, req *emptypb.Empty) (*pb.PostUsedAcc, error) {
-	usr := s.srv.GetItUsedAccount()
+	usr, err := s.srv.GetItUsedAccount(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.PostUsedAcc{
 		Nip:      usr.Nip,
 		Password: usr.Password,
@@ -17,10 +22,15 @@ func (s *Handler) GetUsedIt(ctx context.Context, req *emptypb.Empty) (*pb.PostUs
 }
 
 func (s *Handler) PostUsedIT(ctx context.Context, req *pb.PostUsedAcc) (*emptypb.Empty, error) {
-	s.srv.AddItUsedAccount(entity.UsedUser{
+	err := s.srv.AddItUsedAccount(ctx, &entity.UsedUser{
 		Nip:      req.Nip,
 		Password: req.Password,
 	})
+
+	if err != nil {
+		return nil, err
+	}
+
 	return nil, nil
 }
 

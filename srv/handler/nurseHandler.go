@@ -9,7 +9,10 @@ import (
 )
 
 func (s *Handler) GetUsedNurse(ctx context.Context, req *emptypb.Empty) (*pb.PostUsedAcc, error) {
-	usr := s.srv.GetNurseUsedAccount()
+	usr, err := s.srv.GetNurseUsedAccount(ctx)
+	if err != nil {
+		return nil, err
+	}
 	return &pb.PostUsedAcc{
 		Nip:      usr.Nip,
 		Password: usr.Password,
@@ -17,10 +20,13 @@ func (s *Handler) GetUsedNurse(ctx context.Context, req *emptypb.Empty) (*pb.Pos
 }
 
 func (s *Handler) PostUsedNurse(ctx context.Context, req *pb.PostUsedAcc) (*emptypb.Empty, error) {
-	s.srv.AddNurseUsedAccount(entity.UsedUser{
+	err := s.srv.AddNurseUsedAccount(ctx, &entity.UsedUser{
 		Nip:      req.Nip,
 		Password: req.Password,
 	})
+	if err != nil {
+		return nil, err
+	}
 	return nil, nil
 }
 

@@ -8,6 +8,7 @@ RUN go mod download
 
 COPY ./srv .
 
+ENV CGO_ENABLED=1
 RUN go build -o main .
 
 

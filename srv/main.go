@@ -10,8 +10,11 @@ import (
 	"sync"
 	"time"
 
+	_ "github.com/mattn/go-sqlite3"
+
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/entity/pb"
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/handler"
+	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/repository"
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/service"
 	"google.golang.org/grpc"
 )
@@ -34,15 +37,10 @@ func main() {
 
 	db, err := sql.Open("sqlite3", "usedAccount.db")
 	handleErr(err)
+	migrateDb(db)
+	resetCount(db)
+	runDbJob(db)
 
-	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS usedAccount (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		nip TEXT NOT NULL,
-		password TEXT NOT NULL
-	)`)
-	handleErr(err)
-
-	server := grpc.NewServer()
 	var nipMutex sync.Mutex
 	var itMutex sync.Mutex
 
@@ -51,8 +49,10 @@ func main() {
 		nurseNIPs,
 		&itMutex,
 		&nipMutex,
+		repository.NewRepository(db),
 	))
 
+	server := grpc.NewServer()
 	pb.RegisterNIPServiceServer(server, handler)
 
 	listener, err := net.Listen("tcp", ":50051")
@@ -62,6 +62,69 @@ func main() {
 	if err := server.Serve(listener); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
+}
+
+func runDbJob(db *sql.DB) {
+	ticker := time.NewTicker(5 * time.Second)
+	go func() {
+		for range ticker.C {
+			updateCount(db)
+			fmt.Println("Updated count")
+		}
+	}()
+}
+
+func migrateDb(db *sql.DB) {
+	_, err := db.Exec(`DROP TABLE IF EXISTS used_it_account`)
+	handleErr(err)
+	_, err = db.Exec(`DROP TABLE IF EXISTS used_nurse_account`)
+	handleErr(err)
+	_, err = db.Exec(`DROP TABLE IF EXISTS meta_data`)
+	handleErr(err)
+
+	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS used_it_account (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		nip TEXT NOT NULL,
+		password TEXT NOT NULL
+	)`)
+	handleErr(err)
+	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS used_nurse_account (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		nip TEXT NOT NULL,
+		password TEXT NOT NULL
+	)`)
+	handleErr(err)
+
+	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS meta_data (
+		key TEXT PRIMARY KEY,
+		value INT
+	);`)
+	handleErr(err)
+
+	_, err = db.Exec(`INSERT OR IGNORE INTO meta_data (key, value) VALUES ('itIndex', 0)`)
+	handleErr(err)
+	_, err = db.Exec(`INSERT OR IGNORE INTO meta_data (key, value) VALUES ('nurseIndex', 0)`)
+	handleErr(err)
+}
+
+func resetCount(db *sql.DB) {
+	_, err := db.Exec(`UPDATE meta_data SET value = 0 WHERE key = 'itIndex'`)
+	handleErr(err)
+	_, err = db.Exec(`UPDATE meta_data SET value = 0 WHERE key = 'nurseIndex'`)
+	handleErr(err)
+}
+
+func updateCount(db *sql.DB) {
+	var itCount, nurseCount int
+	err := db.QueryRow("SELECT COUNT(1) FROM used_it_account").Scan(&itCount)
+	handleErr(err)
+	err = db.QueryRow("SELECT COUNT(1) FROM used_nurse_account").Scan(&nurseCount)
+	handleErr(err)
+
+	_, err = db.Exec(`UPDATE meta_data SET value = ? WHERE key = 'itIndex'`, itCount)
+	handleErr(err)
+	_, err = db.Exec(`UPDATE meta_data SET value = ? WHERE key = 'nurseIndex'`, nurseCount)
+	handleErr(err)
 }
 
 func generateNIPs(prefix string) []uint64 {

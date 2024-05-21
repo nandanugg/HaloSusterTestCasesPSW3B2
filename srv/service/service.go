@@ -31,11 +31,13 @@ func NewNipService(
 	itNIPs, nurseNIPs []uint64,
 	itIndexMutex *sync.Mutex,
 	nurseIndexMutex *sync.Mutex,
+	repo UsedAccountRepository,
 ) *NipService {
 	return &NipService{
 		itNIPs:          itNIPs,
 		nurseNIPs:       nurseNIPs,
 		itIndexMutex:    itIndexMutex,
 		nurseIndexMutex: nurseIndexMutex,
+		repo:            repo,
 	}
 }
