@@ -14,6 +14,9 @@ func (s *Handler) GetUsedIt(ctx context.Context, req *emptypb.Empty) (*pb.PostUs
 	if err != nil {
 		return nil, err
 	}
+	if usr == nil {
+		return nil, nil
+	}
 
 	return &pb.PostUsedAcc{
 		Nip:      usr.Nip,

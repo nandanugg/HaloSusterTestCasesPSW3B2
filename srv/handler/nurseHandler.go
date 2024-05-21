@@ -13,6 +13,10 @@ func (s *Handler) GetUsedNurse(ctx context.Context, req *emptypb.Empty) (*pb.Pos
 	if err != nil {
 		return nil, err
 	}
+	if usr == nil {
+		return nil, nil
+	}
+
 	return &pb.PostUsedAcc{
 		Nip:      usr.Nip,
 		Password: usr.Password,

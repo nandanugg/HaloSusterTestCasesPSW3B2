@@ -16,7 +16,7 @@ type Handler struct {
 func NewRequestHandler(srv *service.NipService) *Handler {
 	return &Handler{srv: srv}
 }
-func (h *Handler) Reset(ctx context.Context, req *emptypb.Empty) (*emptypb.Empty, error) {
+func (h *Handler) ResetAll(ctx context.Context, req *emptypb.Empty) (*emptypb.Empty, error) {
 	err := h.srv.Reset(ctx)
 	if err != nil {
 		return nil, err

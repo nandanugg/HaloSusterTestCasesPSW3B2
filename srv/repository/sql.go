@@ -30,6 +30,10 @@ func (r *Repository) GetUsedITAccount(ctx context.Context) (*entity.UsedUser, er
 	var itIndex int
 	row.Scan(&itIndex)
 
+	if itIndex == 0 {
+		return nil, nil
+	}
+
 	usedUser := &entity.UsedUser{}
 	row = r.db.QueryRow("SELECT nip, password FROM used_it_account WHERE id = ?", rand.IntN(itIndex)+1)
 	row.Scan(&usedUser.Nip, &usedUser.Password)
@@ -42,6 +46,9 @@ func (r *Repository) GetUsedNurseAccount(ctx context.Context) (*entity.UsedUser,
 
 	var itIndex int
 	row.Scan(&itIndex)
+	if itIndex == 0 {
+		return nil, nil
+	}
 
 	usedUser := &entity.UsedUser{}
 	row = r.db.QueryRow("SELECT nip, password FROM used_nurse_account WHERE id = ?", rand.IntN(itIndex)+1)
@@ -51,21 +58,21 @@ func (r *Repository) GetUsedNurseAccount(ctx context.Context) (*entity.UsedUser,
 }
 
 func (r *Repository) Reset(ctx context.Context) error {
-	_, err := r.db.Exec("UPDATE meta_data SET value = 0 WHERE key = 'itIndex'")
-	if err != nil {
-		return err
-	}
-	_, err = r.db.Exec("UPDATE meta_data SET value = 0 WHERE key = 'nurseIndex'")
-	if err != nil {
-		return err
-	}
-
-	_, err = r.db.Exec("DELETE FROM used_it_account")
+	_, err := r.db.Exec("DELETE FROM used_it_account")
 	if err != nil {
 		return err
 	}
 
 	_, err = r.db.Exec("DELETE FROM used_nurse_account")
+	if err != nil {
+		return err
+	}
+
+	_, err = r.db.Exec("UPDATE meta_data SET value = 0 WHERE key = 'itIndex'")
+	if err != nil {
+		return err
+	}
+	_, err = r.db.Exec("UPDATE meta_data SET value = 0 WHERE key = 'nurseIndex'")
 	if err != nil {
 		return err
 	}
