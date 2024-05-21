@@ -58,21 +58,49 @@ func (r *Repository) GetUsedNurseAccount(ctx context.Context) (*entity.UsedUser,
 }
 
 func (r *Repository) Reset(ctx context.Context) error {
-	_, err := r.db.Exec("DELETE FROM used_it_account")
+	_, err := r.db.Exec(`DROP TABLE IF EXISTS used_it_account`)
+	if err != nil {
+		return err
+	}
+	_, err = r.db.Exec(`DROP TABLE IF EXISTS used_nurse_account`)
+	if err != nil {
+		return err
+	}
+	_, err = r.db.Exec(`DROP TABLE IF EXISTS meta_data`)
 	if err != nil {
 		return err
 	}
 
-	_, err = r.db.Exec("DELETE FROM used_nurse_account")
+	_, err = r.db.Exec(`CREATE TABLE IF NOT EXISTS used_it_account (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		nip TEXT NOT NULL,
+		password TEXT NOT NULL
+	)`)
+	if err != nil {
+		return err
+	}
+	_, err = r.db.Exec(`CREATE TABLE IF NOT EXISTS used_nurse_account (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		nip TEXT NOT NULL,
+		password TEXT NOT NULL
+	)`)
 	if err != nil {
 		return err
 	}
 
-	_, err = r.db.Exec("UPDATE meta_data SET value = 0 WHERE key = 'itIndex'")
+	_, err = r.db.Exec(`CREATE TABLE IF NOT EXISTS meta_data (
+		key TEXT PRIMARY KEY,
+		value INT
+	);`)
 	if err != nil {
 		return err
 	}
-	_, err = r.db.Exec("UPDATE meta_data SET value = 0 WHERE key = 'nurseIndex'")
+
+	_, err = r.db.Exec(`INSERT OR IGNORE INTO meta_data (key, value) VALUES ('itIndex', 0)`)
+	if err != nil {
+		return err
+	}
+	_, err = r.db.Exec(`INSERT OR IGNORE INTO meta_data (key, value) VALUES ('nurseIndex', 0)`)
 	if err != nil {
 		return err
 	}
