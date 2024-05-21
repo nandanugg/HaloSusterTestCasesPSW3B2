@@ -513,9 +513,6 @@ export default function () {
         let usr
         for (let index = 0; index < 5; index++) {
             usr = TestRegister(config, generateItUserNip(), tags)
-            if (usr) {
-                PostUsedIt(client, usr)
-            }
         }
         if (usr) {
             TestLogin(usr, config, generateItUserNip(), tags)
