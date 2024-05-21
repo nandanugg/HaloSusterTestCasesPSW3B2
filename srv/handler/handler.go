@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/entity/pb"
 	"github.com/nandanugg/HaloSusterTestCasesPSW3B2/service"
@@ -21,5 +22,6 @@ func (h *Handler) ResetAll(ctx context.Context, req *emptypb.Empty) (*emptypb.Em
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("Reset all!")
 	return nil, nil
 }
